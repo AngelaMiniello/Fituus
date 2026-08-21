@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.glass::before {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  left: 10%;
+  width: 80%;
+  height: 45%;
+
+  border-radius: 9999px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,.45),
+    transparent
+  );
+
+  filter: blur(18px);
+
+  pointer-events: none;
+}
