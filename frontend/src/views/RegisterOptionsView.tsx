@@ -14,21 +14,15 @@ export default function RegisterOptionsView() {
     };
 
     return (
-      <View
-        style={{
-    flex: 1,
-    width: "100%",
-    height: "100%", justifyContent: "flex-end"
-  }}
->
+      <View style={{ flex: 1, width: "100%",  height: "100%", justifyContent: "flex-end" }}>
 
         {/* 1. Imagen de fondo en posición absoluta */}
         <Image
           source={require("../../assets/images/public/bg1.png")}
-         style={[
-    StyleSheet.absoluteFillObject,
-    { width: "100%", height: "100%", resizeMode: "contain" }
-  ]}
+          style={[
+            StyleSheet.absoluteFillObject,
+            { width: "100%", height: "100%", resizeMode: "contain" }
+          ]}
         />
 
         {/* 2. Overlay transparente por encima del fondo */}
@@ -37,7 +31,7 @@ export default function RegisterOptionsView() {
           {/* 3. Contenedor de contenido (con zIndex explícito para ir al frente) */}
           <View style={{ zIndex: 20 }} className="flex-col gap-2 px-8 pb-12 mt-auto mb-14" >
 
-            {/* 3. Contenido de la parte inferior */}
+            {/* 4. Contenido de la parte inferior */}
             <View className="flex-col gap-3">
               
               {/* Botón Google */}
@@ -63,16 +57,14 @@ export default function RegisterOptionsView() {
 
             {/* Texto "Already have an account? Log In" */}
             <View className="flex-row items-center justify-center mt-4">
-              <Text className="font-semibold text-black/70">
-    Already have an account?{" "}
-              </Text>
-  <TouchableOpacity
-    activeOpacity={0.7}
-    onPress={() => router.push("/login")}
-  >
-    <Text className="font-bold text-black">Log In</Text>
-  </TouchableOpacity>
-              </View>
+              <Text className="font-semibold text-black/70"> Already have an account?{" "} </Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => router.push("/login")}
+              >
+                <Text className="font-bold text-black">Log In</Text>
+              </TouchableOpacity>
+            </View>
 
           </View>
        </View>

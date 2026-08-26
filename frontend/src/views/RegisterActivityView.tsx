@@ -1,6 +1,5 @@
 import { useRouter, useLocalSearchParams  } from "expo-router";
 import { useState } from "react";
-import chillax from "@/assets/fonts/fonts";//ver lo de la font si ya va
 import WeightModal from "@/components/profilemodals/WeightModal";
 import HeightModal from "@/components/profilemodals/HeightModal";
 import GenderModal from "@/components/profilemodals/GenderModal";

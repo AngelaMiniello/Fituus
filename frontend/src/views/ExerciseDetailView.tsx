@@ -5,7 +5,6 @@ import { ArrowLeft } from "lucide-react-native";
 import { View, Text, ScrollView, TouchableOpacity, TextInput } from "react-native";
 
 export default function ExerciseDetailView(){
-
     const params = useLocalSearchParams ();
     const { id } = useLocalSearchParams ();
     const router = useRouter();
@@ -37,21 +36,22 @@ export default function ExerciseDetailView(){
     }, []);
 
     const handleUpdateExercise = async () => {
-        try {
-          const token = localStorage.getItem("token");
+      try {
+        const token = localStorage.getItem("token");
 
-          const res = api.put(`/exercises/${id}`,
-            {
-              duration
-            },
-            {
-              headers: {
-                Authorization:`Bearer ${token}`
-              }
+        const res = api.put(`/exercises/${id}`,
+          {
+            duration
+          },
+          {
+            headers: {
+              Authorization:`Bearer ${token}`
             }
-          );
+          }
+        );
 
-          router.push("/diary");
+        router.push("/diary");
+
         } catch(error) {
           console.log(error);
         }

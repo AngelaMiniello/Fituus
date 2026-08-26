@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, TouchableOpacity, Modal, Pressable, KeyboardAvoidingView, Platform } from "react-native";
 
 interface WaterModalProps {
-  visible: boolean;
+  visible?: boolean;
   onClose: () => void;
   onWaterAdded: () => void;
 }

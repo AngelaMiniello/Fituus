@@ -53,7 +53,7 @@ export default function GenderModal({ onClose, onGenderAdded}: GenderModalProps)
     <Modal
       animationType="slide"
       transparent={true}
-      visible={true}
+      visible={true}//ojo q en los otros estoy pasando visible como prop
       onRequestClose={onClose}
     >
 

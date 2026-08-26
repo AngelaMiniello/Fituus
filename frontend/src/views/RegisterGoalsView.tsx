@@ -1,6 +1,5 @@
 import { useRouter, useLocalSearchParams  } from "expo-router";
 import { useState } from "react";
-import chillax from "../../assets/fonts/fonts";//ver lo de la font
 import { updateProfile } from "../service/authService";
 import { Flame, Scale, Dumbbell } from "lucide-react-native";
 import { View, Text, ScrollView, TouchableOpacity, ImageBackground } from "react-native";
@@ -29,16 +28,16 @@ export default function RegisterGoalsView() {
   
   const options = [
     {
-    value: "Lose Weight",
-    icon: Flame,
+      value: "Lose Weight",
+      icon: Flame,
     },
     {
-    value: "Maintain Weight",
-    icon: Scale,
+      value: "Maintain Weight",
+      icon: Scale,
     },
     {
-    value: "Gain Muscle",
-    icon: Dumbbell,
+      value: "Gain Muscle",
+      icon: Dumbbell,
     },
   ] as const;
 
@@ -59,7 +58,7 @@ export default function RegisterGoalsView() {
             <Text className="font-bold text-gray-900 text-md">fittuus</Text>
         </View>
 
-        <View className="my-auto">
+          <View className="my-auto">
             {/* Header text */}
             <View>
               <Text className="mb-4 text-3xl font-light leading-tight tracking-wide text-gray-900">

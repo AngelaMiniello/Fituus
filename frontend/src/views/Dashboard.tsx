@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity,  Modal,  TextInput, KeyboardAvoidingView, Platform} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Flame, Beef, Droplets, Footprints, Dumbbell, Moon, ChevronRight, X } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";

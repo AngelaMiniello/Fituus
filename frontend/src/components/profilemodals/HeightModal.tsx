@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, TouchableOpacity, Modal, Pressable, KeyboardAvoidingView, Platform, TextInput } from "react-native";
 
 interface HeightModalProps {
-  visible: boolean;
+  visible?: boolean;
   onClose: () => void;
   onHeightAdded: (height: number)  => void;
 }

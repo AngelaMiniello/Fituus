@@ -16,7 +16,7 @@ import FoodSearchResult from "../ui/FoodSearchResult";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface MealModalProps {
-  visible: boolean; // Controla la visibilidad desde el padre
+  visible?: boolean; // Controla la visibilidad desde el padre
   onClose: () => void;
   onSuccess: () => void;
   mealType?: string;

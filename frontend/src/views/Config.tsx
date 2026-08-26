@@ -97,10 +97,10 @@ export default function ConfigPage() {
       <ScrollView className="flex-1 px-4 py-6 bg-zinc-950">
 
         {/* Header */}
-      <View className="mb-8">
-        <Text className="text-3xl font-bold text-white"> Config </Text>
-        <Text className="mt-1 text-sm text-zinc-400"> Manage your objectives and preferences </Text>
-      </View>
+        <View className="mb-8">
+          <Text className="text-3xl font-bold text-white"> Config </Text>
+          <Text className="mt-1 text-sm text-zinc-400"> Manage your objectives and preferences </Text>
+        </View>
 
       {/* Cards */}
       <View className="p-5 border rounded-3xl bg-zinc-900 border-zinc-800 hover:border-[#7999D9] hover:bg-zinc-800">

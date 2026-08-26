@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { View, Text, TouchableOpacity, Modal, Pressable, KeyboardAvoidingView, Platform, TextInput } from "react-native";
 
 interface WeightModalProps {
-  visible: boolean;
+  visible?: boolean;
   onClose: () => void;
   onWeightAdded: (weight: number)  => void;
 }

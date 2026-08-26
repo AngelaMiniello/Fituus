@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity, Platform, Pressable, Modal, TextInput, Ke
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface ExerciseModalProps {
-  visible: boolean; // Controla la visibilidad desde el padre
+  visible?: boolean; // Controla la visibilidad desde el padre
   onClose: () => void;
   onExerciseAdded: () => void;
 }
