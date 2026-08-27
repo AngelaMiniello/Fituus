@@ -2,13 +2,12 @@ import { ILoginProps, IRegisterProps, IProfileSetup } from "../types/types";
 import api from "../service/api"; // Instancia de Axios
 
 // En React Native / Expo las variables usan EXPO_PUBLIC_
-// OJO: Cambia "192.168.1.X" por la IP local de tu PC si pruebas en un dispositivo físico
 const APIURL =
   process.env.EXPO_PUBLIC_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
   "http://10.0.2.2:3000";
 
-// Helper para parsear respuestas de fetch si prefieres no usar Axios
+// Helper para parsear respuestas de fetch si prefiero no usar Axios
 async function parseResponseSafely(response: Response) {
   const contentType = response.headers.get("content-type") || "";
 
@@ -74,7 +73,7 @@ export async function register(userData: IRegisterProps) {
   }
 }
 
-// 3. Actualización de Perfil (Usando tu instancia de Axios)
+// 3. Actualización de Perfil (Usando instancia de Axios)
 export const updateProfile = async (data: IProfileSetup, tokenFromParams?: string) => {
   try {
     const response = await api.patch("/user/profile/metrics", data, {
