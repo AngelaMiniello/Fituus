@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-// Usa la variable de entorno de Expo con fallback a tu IP de desarrollo actual
+// Uso la variable de entorno de Expo con fallback a mi IP de desarrollo actual
 const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.0.41:3000';
 
 const api = axios.create({
@@ -11,12 +11,12 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     try {
-      // 1. Leemos el objeto "user_session"
+      // 1. Leo el objeto "user_session"
       const sessionString = await SecureStore.getItemAsync("user_session");
       console.log("🔍 [Interceptor] Lo que lee de SecureStore:", sessionString); // 👈 AGREGA ESTE LOG
 
       if (sessionString) {
-        // 2. Parseamos el JSON para obtener la propiedad token
+        // 2. Parseo el JSON para obtener la propiedad token
         const session = JSON.parse(sessionString);
         console.log("🔑 [Interceptor] Header adjuntado:", config.headers.Authorization);
         if (session?.token) {
