@@ -1,5 +1,5 @@
 import { useState } from "react";//handle estados
-import api from "../../service/api";//conect con el back?
+import api from "../../service/api";//conect con el back
 import { X } from "lucide-react-native";
 import { useAuth } from "../../context/AuthContext";
 import { View, Text, TouchableOpacity, Modal, Pressable, KeyboardAvoidingView, Platform, TextInput } from "react-native";
@@ -25,12 +25,12 @@ export default function WeightModal({ onClose, onWeightAdded, visible }: WeightM
       setLoading(true);
       const weightNumber = Number(weight);
 
-      // 🚀 Llamada limpia a Axios (el interceptor ya adjunta el token automáticamente)
+      //Llamada limpia a Axios (el interceptor ya adjunta el token automáticamente)
       const res = await api.patch("user/profile/metrics", {
         weight: weightNumber,
       });
 
-      // 🔄 Si la respuesta devuelve el usuario actualizado (o armamos el objeto):
+      // 🔄 Si la respuesta devuelve el usuario actualizado (o armo el objeto):
       if (userData) {
         setUserData({
           ...userData,
