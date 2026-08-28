@@ -42,7 +42,7 @@ export function DailyProgressProvider({ children,}: { children: React.ReactNode;
         console.log("El usuario no tiene metas registradas aún.");
         setDailyProgress(null);
       } else if (status === 401) {
-        // 🔒 Manejamos silenciosamente el 401 si no hay sesión activa aún
+        //Manejo silenciosamente el 401 si no hay sesión activa todavía
         console.log("Usuario deslogueado o token no disponible aún.");
         setDailyProgress(null);
       } else {

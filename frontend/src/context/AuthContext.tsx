@@ -24,7 +24,7 @@ export interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const router = useRouter();
   const [userData, setUserData] = useState<IUserSession | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // 👈 Estado de carga inicial
+  const [isLoading, setIsLoading] = useState(true); //Estado de carga inicial
   
   // EFECTO 1: Guardo cuando el usuario cambia (Unificado a "user_session")
   useEffect(() => {
@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error("Error recuperando sesión:", error);
       setUserData(null);
     } finally {
-      // 👈 2. IMPORTANTE: Cuando termina de leer (haya encontrado sesión o no), quitamos el loading
+      //IMPORTANTE: Cuando termina de leer (haya encontrado sesión o no), quito el loading
       setIsLoading(false);
     }
   };
