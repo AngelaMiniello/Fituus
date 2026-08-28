@@ -28,10 +28,10 @@ export function GoalsProvider({ children,}: { children: React.ReactNode;}) {
   const { userData, isLoading } = useAuth();
 
  const fetchGoals = async () => {
-    // 🛑 Si AuthContext todavía está leyendo el SecureStore, frenamos acá
+    // 🛑 si AuthContext todavía está leyendo el SecureStore, freno acá
     if (isLoading) return;
 
-    // 🛑 Si ya terminó de buscar y no hay token, reseteamos las metas
+    // 🛑 si ya terminó de buscar y no hay token, reseteo las metas
     if (!userData?.token) {
       setGoals(null);
       return;
@@ -55,7 +55,7 @@ export function GoalsProvider({ children,}: { children: React.ReactNode;}) {
     }
   };
 
-  // 🚀 EL CAMBIO IMPORTANTE ESTÁ ACÁ ABAJO:
+  //EL CAMBIO IMPORTANTE ESTÁ ACÁ ABAJO
   useEffect(() => {
     fetchGoals();
   }, [isLoading, userData?.token]);
