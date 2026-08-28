@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator, Alert } from "react-na
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-// Si usas Expo / React Native puro para la URL del backend
+//si uso Expo / React Native puro para la URL del backend
 const API_URL = process.env.EXPO_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL;
 
 type FoodProps = {
@@ -39,7 +39,7 @@ export default function FoodSearchResult({ food, onFoodAdded, mealType, quantity
     try {
       setLoading(true);
 
-      // En React Native leemos el token guardado en AsyncStorage
+      // En React Native leo el token guardado en AsyncStorage
       const token = await AsyncStorage.getItem("token");
 
       await axios.post(

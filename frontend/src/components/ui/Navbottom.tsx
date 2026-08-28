@@ -42,7 +42,7 @@ export default function BottomNavbar() {
         <View className="relative items-center justify-center -top-6">
           <TouchableOpacity
             onPress={() => {
-              /* Tu acción del botón + (Ej: abrir Modal de comida) */
+              /* acción del botón + (Ej: abrir Modal de comida) */
             }}
             activeOpacity={0.85}
             className="w-16 h-16 items-center justify-center bg-[#6289D9] rounded-full shadow-lg border-4 border-black"

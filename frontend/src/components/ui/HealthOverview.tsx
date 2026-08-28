@@ -21,12 +21,12 @@ export default function HealthOverview() {
 
   // PASOS
   const stepsGoal = goals?.stepsGoal || 10000;
-  // Si en el futuro agregas los pasos a dailyProgress los lees de ahí; por ahora fallback a 0
+  // Si agrego los pasos a dailyProgress los leo de ahí; por ahora fallback a 0
   const stepsDone = (dailyProgress as any)?.steps || 0; 
   const stepsPercentage = Math.min((stepsDone / stepsGoal) * 100, 100);
 
   // EJERCICIO (Calorías quemadas / Tiempo)
-  // Usamos dailyProgress.caloriesBurned como referencia
+  // Uso dailyProgress.caloriesBurned como referencia
   const exerciseGoal = (goals as any)?.exerciseGoal || 60; 
   const exerciseMinutes = dailyProgress?.exerciseMinutes || 0;
   const exercisePercentage = Math.min((exerciseMinutes / exerciseGoal) * 100, 100);
