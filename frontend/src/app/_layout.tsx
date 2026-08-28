@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
-// 1. Importamos useRootNavigationState
+// 1. Importo useRootNavigationState
 import { Slot, SplashScreen, useRouter, useSegments, useRootNavigationState } from "expo-router";import { useFonts } from "expo-font";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -21,7 +21,7 @@ function MainContent() {
 
   const navigationState = useRootNavigationState();
 
-  // ✅ Aceptamos tanto "register" como "login" como rutas públicas/de auth
+  //Acepto tanto "register" como "login" como rutas públicas/de auth
   const isAtAuth = segments[0] === "register" || segments[0] === "login";
 
   useEffect(() => {
@@ -38,7 +38,7 @@ function MainContent() {
     }
   }, [userData, segments, navigationState?.key]);
 
-  // Si no está logueado, sólo mostramos la pantalla de Registro limpia (sin Navtop ni Navbottom)
+  // Si no está logueado, sólo muestro la pantalla de Registro limpia (sin Navtop ni Navbottom)
   if (!userData) {
     return (
       <View className="flex-1 bg-zinc-950">
@@ -47,7 +47,7 @@ function MainContent() {
     );
   }
 
-  // Si SÍ está logueado, mostramos el Layout completo con Navtop y Navbottom
+  // Si SÍ está logueado, muestro el Layout completo con Navtop y Navbottom
   return (
     <View className="flex-1 bg-zinc-950">
       <Navtop />
@@ -76,7 +76,6 @@ export default function RootLayout() {
   }
 
   return (
-    // Mantén TODOS tus Providers rodeando todo
     <AuthProvider>
       <GoalsProvider>
         <DailyProgressProvider>

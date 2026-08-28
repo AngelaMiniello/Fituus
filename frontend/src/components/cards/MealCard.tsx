@@ -2,11 +2,7 @@ import {Trash2} from "lucide-react-native"
 import { useRouter } from "expo-router";
 import React from "react";
 import { Text, Pressable, TouchableOpacity, View } from "react-native";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle,  withSpring} from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 

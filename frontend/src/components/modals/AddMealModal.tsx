@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  Pressable,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { View, Text, TouchableOpacity, Modal, TextInput, Pressable, FlatList, KeyboardAvoidingView, Platform,} from "react-native";
 import axios from "axios";
 import api from "../../service/api"; // Instancia de Axios configurada
 import FoodSearchResult from "../ui/FoodSearchResult";

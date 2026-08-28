@@ -1,5 +1,5 @@
 import { useState } from "react";//manejo estados
-import api from "../../service/api";//conecto con el back?
+import api from "../../service/api";//conecto con el back
 import { X } from "lucide-react-native";
 import { View, Text, TouchableOpacity, Platform, Pressable, Modal, TextInput, KeyboardAvoidingView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
