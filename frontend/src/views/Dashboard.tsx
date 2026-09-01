@@ -121,8 +121,8 @@ export default function DashboardPage() {
 
         {/* Cards */}
         <View className="p-5 border rounded-3xl bg-zinc-900 border-zinc-800 hover:border-[#7999D9] hover:bg-zinc-800">
-          <View className="mb-2 text-xl font-semibold text-white"> Goals </View>
-          <View className="mb-4 text-sm text-zinc-400"> Personalize your daily goals </View>
+          <Text className="mb-2 text-xl font-semibold text-white"> Goals </Text>
+          <Text className="mb-4 text-sm text-zinc-400"> Personalize your daily goals </Text>
 
             {settingsCards.map((card, index) => {
 

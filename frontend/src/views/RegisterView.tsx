@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useRouter, useLocalSearchParams } from "expo-router";
-
+import { useRouter } from "expo-router";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Eye, EyeOff, User, AtSign, Mail, Lock, UserCircle2, ChevronRight } from "lucide-react-native";
@@ -9,26 +8,34 @@ import { View, Text, TouchableOpacity, ImageBackground, ScrollView, TextInput} f
 import { registerSchema } from "../lib/registerSchema";
 import { register } from "../service/authService";
 import { IRegisterProps } from "../types/types";
+import { useAuth } from "../context/AuthContext";
 
 export default function RegisterView() {
   const router = useRouter();
-  const { token } = useLocalSearchParams<{ token?: string }>();
+  const { setUserData } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = async (values: IRegisterProps) => {
-    try {
-      await register(values);
-      router.push("/register/profile");
-    } catch (error) {
-      console.error(error);
+ const handleSubmit = async (values: IRegisterProps) => {
+  try {
+    const response = await register(values);
+
+    if (response?.token) {
+      // NO llamamos a setUserData acá para no disparar el redireccionamiento del layout
+      router.push({
+        pathname: "/register/profile",
+        params: { token: response.token },
+      } as any);
     }
-  };
+  } catch (error) {
+    console.error("Error en registro:", error);
+  }
+};
   
   return (
     <ImageBackground
-      source={require("../../assets/images/public/bgreg1.png")} // Ajusta la ruta a la imagen local
+      source={require("../../assets/images/public/bgreg1.png")}
       className="flex-1 bg-black"
       resizeMode="cover"
     >

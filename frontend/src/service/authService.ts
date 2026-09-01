@@ -74,13 +74,17 @@ export async function register(userData: IRegisterProps) {
 }
 
 // 3. Actualización de Perfil (Usando instancia de Axios)
-export const updateProfile = async (data: IProfileSetup, tokenFromParams?: string) => {
+export const updateProfile = async (data: IProfileSetup, token?: string) => {
   try {
     const response = await api.patch("/user/profile/metrics", data, {
-      headers: tokenFromParams ? { Authorization: `Bearer ${tokenFromParams}` } : undefined,
-    });
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
     return response.data;
   } catch (error: any) {
+    console.log("📌 Error HTTP en updateProfile:", error?.response?.status);
+    console.log("📌 Detalle Backend:", error?.response?.data);
     const message = error.response?.data?.message || "Error al actualizar el perfil";
     throw new Error(message);
   }

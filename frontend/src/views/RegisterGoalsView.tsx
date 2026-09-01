@@ -2,7 +2,8 @@ import { useRouter, useLocalSearchParams  } from "expo-router";
 import { useState } from "react";
 import { updateProfile } from "../service/authService";
 import { Flame, Scale, Dumbbell } from "lucide-react-native";
-import { View, Text, ScrollView, TouchableOpacity, ImageBackground } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, ImageBackground, ActivityIndicator } from "react-native";
+import { useAuth } from "@/context/AuthContext";
 
 type Goal =
   | "Lose Weight"
@@ -12,19 +13,56 @@ type Goal =
 
 export default function RegisterGoalsView() {
   const router = useRouter();
-  const { token } = useLocalSearchParams<{ token?: string }>();
-  
+  const { userData, setUserData } = useAuth();
+
+  // 1. Recibimos todos los parámetros acumulados en los pasos anteriores
+  const params = useLocalSearchParams<{
+    token?: string;
+    weight?: string;
+    height?: string;
+    gender?: string;
+    activityLevel?: string;
+  }>();
+
   const [goal, setGoal] = useState<Goal | "">("");//choose activity settings
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    try {
-      await updateProfile({  goal  });
+  try {
+    setLoading(true);
 
-      router.push("/home");
-    } catch (error) {
-      console.error(error);
+    if (!params.token) {
+      console.error("❌ No se encontró el token en los parámetros.");
+      return;
     }
-  };
+
+    // 1. Consolidamos los datos de todos los pasos
+    const finalProfileData = {
+      weight: params.weight ? Number(params.weight) : undefined,
+      height: params.height ? Number(params.height) : undefined,
+      gender: params.gender,
+      activityLevel: params.activityLevel,
+      goal,
+    };
+
+    // 2. Guardamos la respuesta del backend
+    const updatedUser = await updateProfile(finalProfileData, params.token);
+
+    // 3. Sincronizamos la sesión global
+    await setUserData({
+      token: params.token,
+      user: updatedUser?.user || updatedUser,
+    });
+
+    // 4. Redirigimos al inicio
+    router.push("/");
+
+  } catch (error) {
+    console.error("❌ Error al guardar datos finales:", error);
+  } finally {
+    setLoading(false);
+  }
+};
   
   const options = [
     {
@@ -118,7 +156,8 @@ export default function RegisterGoalsView() {
               <TouchableOpacity
                 activeOpacity={0.7}
                 className="px-8 py-4 rounded-full"
-                onPress={() => router.push("/register/goals")}
+                onPress={handleSubmit}
+                disabled={loading}
               >
                 <Text className="font-semibold text-gray-900">Skip</Text>
               </TouchableOpacity>
@@ -127,8 +166,13 @@ export default function RegisterGoalsView() {
                 activeOpacity={0.8}
                 className="px-8 py-4 rounded-full bg-[#7999D9]"
                 onPress={handleSubmit}
+                disabled={loading}
               >
-                <Text className="font-semibold text-white">Continue</Text>
+                {loading ? (
+                <ActivityIndicator color="#ffffff" size="small" />
+              ) : (
+                <Text className="font-semibold text-white">Finish</Text>
+              )}
               </TouchableOpacity>
             </View>
 

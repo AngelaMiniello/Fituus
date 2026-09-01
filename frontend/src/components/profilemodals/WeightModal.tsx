@@ -1,7 +1,5 @@
 import { useState } from "react";//handle estados
-import api from "../../service/api";//conect con el back
 import { X } from "lucide-react-native";
-import { useAuth } from "../../context/AuthContext";
 import { View, Text, TouchableOpacity, Modal, Pressable, KeyboardAvoidingView, Platform, TextInput } from "react-native";
 
 interface WeightModalProps {
@@ -11,44 +9,18 @@ interface WeightModalProps {
 }
 
 export default function WeightModal({ onClose, onWeightAdded, visible }: WeightModalProps) {
-
   const [weight, setWeight] = useState("");//string because <input> always works with text
-  const [loading, setLoading] = useState(false);
-  
-  const { userData, setUserData } = useAuth();
 
   //function to add weight
   const handleAddWeight = async () => {
     if (!weight || isNaN(Number(weight))) return;
 
-    try {
-      setLoading(true);
-      const weightNumber = Number(weight);
-
-      //Llamada limpia a Axios (el interceptor ya adjunta el token automáticamente)
-      const res = await api.patch("user/profile/metrics", {
-        weight: weightNumber,
-      });
-
-      // 🔄 Si la respuesta devuelve el usuario actualizado (o armo el objeto):
-      if (userData) {
-        setUserData({
-          ...userData,
-          user: res.data.user || {
-            ...userData.user,
-            weight: weightNumber,
-          },
-        });
-      }
-
-      onWeightAdded(weightNumber);
-      setWeight(""); // Limpiamos el input
-      onClose();
-    } catch (error) {
-      console.error("Error al actualizar el peso:", error);
-    } finally {
-      setLoading(false);
-    }
+    const weightNumber = Number(weight);
+    
+   // Le pasa el valor capturado al estado local del RegisterProfileView
+    onWeightAdded(weightNumber);
+    setWeight(""); 
+    onClose();
   };
   
   return (

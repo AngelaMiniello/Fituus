@@ -1,9 +1,5 @@
 import { useRouter, useLocalSearchParams  } from "expo-router";
 import { useState } from "react";
-import WeightModal from "@/components/profilemodals/WeightModal";
-import HeightModal from "@/components/profilemodals/HeightModal";
-import GenderModal from "@/components/profilemodals/GenderModal";
-import { updateProfile } from "@/service/authService";
 import { View, Text, ScrollView, TouchableOpacity, ImageBackground } from "react-native";
 
 type ActivityLevel =
@@ -15,19 +11,29 @@ type ActivityLevel =
 
 export default function RegisterActivityView() {
   const router = useRouter();
-  // En Expo Router, los params se leen directo del objeto (sin .get())
-  const { token } = useLocalSearchParams<{ token?: string }>();
+  
+  // 1. Leemos los parámetros que enviamos desde RegisterProfileView
+  const { token, weight, height, gender } = useLocalSearchParams<{
+    token?: string;
+    weight?: string;
+    height?: string;
+    gender?: string;
+  }>();
 
   const [activityLevel, setActivityLevel] = useState<ActivityLevel | "">("");//choose activity settings
 
-  const handleSubmit = async () => {
-    try {
-      await updateProfile({ activityLevel });
-
-      router.push("/register/goals");
-    } catch (error) {
-      console.error(error);
-    }
+  // 2. Pasamos todo junto a /register/goals (con o sin nivel de actividad)
+  const handleNext = () => {
+    router.push({
+      pathname: "/register/goals",
+      params: {
+        token,
+        weight,
+        height,
+        gender,
+        activityLevel,
+      },
+    } as any);
   };
   
   const options: ActivityLevel[] = [ "sedentary", "lightly active", "moderately active", "active", "very active" ];
@@ -100,7 +106,7 @@ export default function RegisterActivityView() {
           <TouchableOpacity
             activeOpacity={0.8}
             className="px-8 py-4 rounded-full bg-[#7999D9]"
-            onPress={handleSubmit}
+            onPress={handleNext}
           >
             <Text className="font-semibold text-white">Continue</Text>
           </TouchableOpacity>

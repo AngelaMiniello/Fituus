@@ -16,14 +16,12 @@ export default function RegisterProfileView() {
   const [height, setHeight] = useState<number | undefined>(undefined);
   const [gender, setGender] = useState<string | undefined>(undefined);
 
-  const handleSubmit = async () => {
-    try {
-      await updateProfile({ weight, height, gender }, token);
-
-      router.push("/register/activity");
-    } catch (error) {
-      console.error(error);
-    }
+  // Avanzar con o sin datos (los pasamos a la siguiente pantalla)
+  const handleNext = () => {
+    router.push({
+      pathname: "/register/activity",
+      params: { token, weight, height, gender },
+    } as any);
   };
   
   return (
@@ -128,7 +126,7 @@ export default function RegisterProfileView() {
             <TouchableOpacity
               activeOpacity={0.8}
               className="px-8 py-4 rounded-full bg-[#7999D9]"
-              onPress={handleSubmit}
+              onPress={handleNext}
             > 
 
               <Text className="font-semibold text-white">Continue</Text>

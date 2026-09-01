@@ -1,7 +1,5 @@
 import { useState } from "react";//handle estados
-import api from "../../service/api";//conect con el back?
 import { X } from "lucide-react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, TouchableOpacity, Modal, Pressable, KeyboardAvoidingView, Platform, TextInput } from "react-native";
 
 interface HeightModalProps {
@@ -11,30 +9,16 @@ interface HeightModalProps {
 }
 
 export default function HeightModal({ onClose, onHeightAdded, visible }: HeightModalProps) {
-
   const [height, setHeight] = useState("");//string because <input> always works with text
 
   //function to add height
-  const handleAddHeight = async () => {
-    try {
-      const token =  await AsyncStorage.getItem("token");
-      const heightNumber = Number(height);
+  const handleAddHeight = () => {
+    if (!height || isNaN(Number(height))) return;
 
-      await api.patch( "user/profile/metrics",
-        {  height: Number(height),  },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      onHeightAdded(heightNumber);
-      onClose();
-
-    } catch (error) {
-      console.error(error);
-    }
+    const heightNumber = Number(height);
+    onHeightAdded(heightNumber);
+    setHeight("");
+    onClose();
   };
   
   return (

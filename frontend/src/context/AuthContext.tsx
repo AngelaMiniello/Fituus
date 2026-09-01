@@ -1,20 +1,21 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "expo-router";
-import * as SecureStore from "expo-secure-store"; // Reemplaza a js-cookie
+import * as SecureStore from "expo-secure-store";
 import { IUserSession } from "../types/types";
+import { setAuthToken } from "@/service/api";
 
 interface AuthContextType {
   userData: IUserSession | null;
   setUserData: (data: IUserSession | null) => void;
   handleLogout: () => void;
-  isLoading:  boolean;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
   userData: null,
   setUserData: () => {},
   handleLogout: () => {},
-  isLoading: true
+  isLoading: true,
 });
 
 export interface AuthProviderProps {
@@ -23,55 +24,50 @@ export interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const router = useRouter();
-  const [userData, setUserData] = useState<IUserSession | null>(null);
-  const [isLoading, setIsLoading] = useState(true); //Estado de carga inicial
-  
-  // EFECTO 1: Guardo cuando el usuario cambia (Unificado a "user_session")
-  useEffect(() => {
-  const loadSession = async () => {
-    try {
-      const sessionData = await SecureStore.getItemAsync("user_session");
+  const [userData, setUserDataState] = useState<IUserSession | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-      if (sessionData) {
-        setUserData(JSON.parse(sessionData));
-      }
-    } catch (error) {
-      console.error("Error recuperando sesión:", error);
-      setUserData(null);
-    } finally {
-      //IMPORTANTE: Cuando termina de leer (haya encontrado sesión o no), quito el loading
-      setIsLoading(false);
-    }
-  };
-
-  loadSession();
-}, []);
-
-  // EFECTO 2: Recupero la sesión al cargar la página (Unificado a "user_session")
+  // 1. CARGA INICIAL: Recuperar sesión al abrir la app
   useEffect(() => {
     const loadSession = async () => {
       try {
-        // Leo de SecureStore
         const sessionData = await SecureStore.getItemAsync("user_session");
 
         if (sessionData) {
-          setUserData(JSON.parse(sessionData));
+          const parsedSession: IUserSession = JSON.parse(sessionData);
+          setUserDataState(parsedSession);
+          setAuthToken(parsedSession.token); //Sincronizamos con api.ts en RAM
         }
       } catch (error) {
         console.error("Error recuperando sesión:", error);
-        setUserData(null);
+        setUserDataState(null);
+        setAuthToken(null);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     loadSession();
   }, []);
 
-  // LOGOUT: Limpia el mismo nombre "user_session"
+  // 2. SET USER DATA: Guardar en React state, SecureStore y RAM
+  const setUserData = async (data: IUserSession | null) => {
+    setUserDataState(data);
+
+    if (data) {
+      setAuthToken(data.token); // Instantáneo en RAM para el interceptor
+      await SecureStore.setItemAsync("user_session", JSON.stringify(data));
+    } else {
+      setAuthToken(null);
+      await SecureStore.deleteItemAsync("user_session");
+    }
+  };
+
+  // 3. LOGOUT
   const handleLogout = async () => {
     try {
-      await SecureStore.deleteItemAsync("user_session");
-      setUserData(null);
-      router.replace("/login"); // Se recomienda 'replace' para no permitir volver atrás con el botón físico
+      await setUserData(null); // Limpia estado, RAM y SecureStore
+      router.replace("/login");
     } catch (error) {
       console.error("Error cerrando sesión:", error);
     }
@@ -83,7 +79,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         userData,
         setUserData,
         handleLogout,
-        isLoading
+        isLoading,
       }}
     >
       {children}

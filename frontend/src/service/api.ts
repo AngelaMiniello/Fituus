@@ -1,41 +1,53 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-// Uso la variable de entorno de Expo con fallback a mi IP de desarrollo actual
 const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.0.41:3000';
 
 const api = axios.create({
   baseURL: API_URL,
 });
 
+// Variable en memoria RAM (Síncrona, instantánea)
+let inMemoryToken: string | null = null;
+
+// Función para setear el token en memoria apenas te logueás
+export const setAuthToken = (token: string | null) => {
+  inMemoryToken = token;
+};
+
+// Carga inicial del token al abrir la app
+SecureStore.getItemAsync("user_session").then((sessionString) => {
+  if (sessionString) {
+    try {
+      const session = JSON.parse(sessionString);
+      if (session?.token) {
+        inMemoryToken = session.token;
+      }
+    } catch (e) {
+      console.error("Error al parsear sesión guardada", e);
+    }
+  }
+});
+
 api.interceptors.request.use(
   async (config) => {
-    try {
-      // 1. Leo el objeto "user_session"
+    // 1. Si no lo tenemos en memoria todavía, intentamos leer de SecureStore como fallback
+    if (!inMemoryToken) {
       const sessionString = await SecureStore.getItemAsync("user_session");
-      console.log("🔍 [Interceptor] Lo que lee de SecureStore:", sessionString); // 👈 AGREGA ESTE LOG
-
       if (sessionString) {
-        // 2. Parseo el JSON para obtener la propiedad token
         const session = JSON.parse(sessionString);
-        console.log("🔑 [Interceptor] Header adjuntado:", config.headers.Authorization);
-        if (session?.token) {
-          config.headers.Authorization = `Bearer ${session.token}`;
-          console.log("🔑 [Interceptor] Header adjuntado:", config.headers.Authorization);
-
-        }
-      } else {
-        console.log("⚠️ [Interceptor] SecureStore devolvió NULL para 'user_session'");
+        inMemoryToken = session?.token || null;
       }
-    } catch (error) {
-      console.error("Error al obtener el token del almacenamiento seguro:", error);
+    }
+
+    // 2. Si tenemos token (ya sea de memoria o storage), lo pegamos en el Header
+    if (inMemoryToken) {
+      config.headers.Authorization = `Bearer ${inMemoryToken}`;
     }
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 export default api;

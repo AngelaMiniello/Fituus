@@ -18,27 +18,27 @@ function MainContent() {
   const { userData } = useAuth();
   const segments = useSegments();
   const router = useRouter();
-
   const navigationState = useRootNavigationState();
 
-  //Acepto tanto "register" como "login" como rutas públicas/de auth
-  const isAtAuth = segments[0] === "register" || segments[0] === "login";
+  // 1. Verificamos la ruta exacta o el grupo
+  const isAuthRoute = segments[0] === "login" || segments[0] === "register";
 
   useEffect(() => {
     if (!navigationState?.key) return;
     if (userData === undefined) return;
 
-    // Si NO hay usuario y NO está en register ni login -> Redirigir a register
-    if (!userData && !isAtAuth) {
+    // Si NO hay usuario y NO está en register ni login -> Redirigir al inicio del registro
+    if (!userData && !isAuthRoute) {
       router.replace("/register");
     } 
-    // Si SÍ hay usuario pero intenta ver register o login -> Redirigir al inicio
-    else if (userData && isAtAuth) {
+    // Si SÍ hay usuario completo y quiere entrar a /login o a /register (el inicio), lo mandamos a home.
+    // OJO: Si estás en /register/profile no te tiene que sacar.
+    else if (userData && (segments[0] === "login" || (segments[0] === "register" && segments.length === 1))) {
       router.replace("/");
     }
   }, [userData, segments, navigationState?.key]);
 
-  // Si no está logueado, sólo muestro la pantalla de Registro limpia (sin Navtop ni Navbottom)
+  // Si no hay userData (o estás en medio del flujo de register sin context)
   if (!userData) {
     return (
       <View className="flex-1 bg-zinc-950">
