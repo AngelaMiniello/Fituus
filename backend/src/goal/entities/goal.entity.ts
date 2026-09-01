@@ -39,4 +39,7 @@ export class Goal {
   @OneToOne(() => User, (user) => user.goal)
   @JoinColumn()
   user!: User;
+
+  @Column({ nullable: true })
+  goalType!: string;
 }
