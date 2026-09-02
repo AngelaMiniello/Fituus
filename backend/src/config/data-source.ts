@@ -8,12 +8,9 @@ import { Exercise } from "../exercise/entities/exercise.entity";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  url: process.env.DATABASE_URL,
   synchronize: true,
   logging: false,
-  entities: [User, Meal, Goal, WaterEntry, Exercise ],
+  entities: [User, Meal, Goal, WaterEntry, Exercise],
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
 });
