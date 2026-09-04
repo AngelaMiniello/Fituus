@@ -26,7 +26,7 @@ export default function RegisterProfileView() {
   
   return (
     <ImageBackground
-      source={require("../../assets/images/public/bgreg1.png")} // Ajusta la ruta a la imagen local
+      source={require("../../assets/images/public/bg.png")} // Ajusta la ruta a la imagen local
       className="flex-1 bg-black"
       resizeMode="cover"
     >
@@ -55,7 +55,7 @@ export default function RegisterProfileView() {
           </View>
       
           {/* Card */}
-          <View className="w-full p-2 border rounded-3xl bg-pink-300/60 border-white/20">
+          <View className="w-full p-2 border rounded-3xl bg-pink-300/70 border-white/20">
 
             {/* Weight Row */}
             <TouchableOpacity

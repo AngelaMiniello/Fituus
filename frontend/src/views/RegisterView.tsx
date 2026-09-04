@@ -35,7 +35,7 @@ export default function RegisterView() {
   
   return (
     <ImageBackground
-      source={require("../../assets/images/public/bgreg1.png")}
+      source={require("../../assets/images/public/bg.png")}
       className="flex-1 bg-black"
       resizeMode="cover"
     >

@@ -44,7 +44,7 @@ export default function LoginPage() {
     <View style={{ flex: 1, width: "100%", height: "100%"}}>
 
       <Image
-        source={require("@/assets/images/public/bgreg1.png")}
+        source={require("@/assets/images/public/bg.png")}
         style={[
           StyleSheet.absoluteFillObject,
           { width: "100%", height: "100%", resizeMode: "cover" }
@@ -55,19 +55,19 @@ export default function LoginPage() {
 
         {/* Brand Header */}
         <View className="mt-4 mb-8">
-          <Text className="font-bold text-gray-900 text-md font-chillax">fituus</Text>
+          <Text className="text-lg text-gray-900 font-chillax-bold">fituus</Text>
         </View>
 
         {/*Form Wrapper */}
-        <View className="my-auto">
+        <View className="px-4 py-4 my-auto">
           <View className="items-center w-full mb-8">
-            <Text className="mb-4 text-3xl font-bold leading-tight tracking-wide text-gray-900 font-chillax">Login</Text>
+            <Text className="text-3xl leading-tight tracking-wide text-gray-900 font-chillax-bold ">Login</Text>
           </View>
 
-          <View className="w-full p-4 border rounded-3xl bg-pink-300/60 border-white/20">  
-            <View className="flex-col gap-3">
+          <View className="w-full p-4 border rounded-3xl bg-pink-300/70 border-white/20">  
+            <View className="flex-col gap-2">
               <View>
-                <View className="relative items-center justify-center mb-4">
+                <View className="relative items-center justify-center mb-3">
                   <TextInput
                     placeholder="Email"
                     placeholderTextColor="#71717a"
@@ -83,7 +83,7 @@ export default function LoginPage() {
               </View>
 
               <View>
-                <View className="relative items-center justify-center mb-4">
+                <View className="relative items-center justify-center mb-3">
                   <TextInput
                     secureTextEntry
                     placeholder="Password"
@@ -108,9 +108,9 @@ export default function LoginPage() {
 
               <TouchableOpacity 
                 onPress={handleLogin}
-                className="self-stretch py-4 mt-2 items-center justify-center rounded-full bg-[#7999D9]"
+                className="py-4 mt-2 items-center justify-center rounded-full bg-[#7999D9]"
               >
-                <Text className="text-base font-semibold text-white font-chillax">Login</Text>
+                <Text className="text-lg font-bold text-white font-chillax">Login</Text>
               </TouchableOpacity>
             </View>
           </View>

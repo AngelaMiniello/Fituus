@@ -63,13 +63,13 @@ function MainContent() {
 export default function RootLayout() {
   
   const [loaded, error] = useFonts({
-  'Chillax-Regular': require('../../../assets/fonts/Chillax-Regular.otf'),
-  'Chillax-Bold': require('../../../assets/fonts/Chillax-Bold.otf'),
-  'Chillax-Medium': require('../../../assets/fonts/Chillax-Medium.otf'),
-  'Chillax-Semibold': require('../../../assets/fonts/Chillax-Semibold.otf'),
-  'Chillax-Light': require('../../../assets/fonts/Chillax-Light.otf'),
-  'Chillax-Extralight': require('../../../assets/fonts/Chillax-Extralight.otf'),
-  });
+  'Chillax-Regular': require('../../assets/fonts/Chillax-Regular.otf'),
+  'Chillax-Bold': require('../../assets/fonts/Chillax-Bold.otf'),
+  'Chillax-Medium': require('../../assets/fonts/Chillax-Medium.otf'),
+  'Chillax-Semibold': require('../../assets/fonts/Chillax-Semibold.otf'),
+  'Chillax-Light': require('../../assets/fonts/Chillax-Light.otf'),
+  'Chillax-Extralight': require('../../assets/fonts/Chillax-Extralight.otf'),
+});
 
   useEffect(() => {
     if (loaded || error) {

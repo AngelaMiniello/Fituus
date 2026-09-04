@@ -7,14 +7,14 @@ module.exports = {
     "./app/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        chillax: ["Chillax-Regular"],
+        "chillax-bold": ["Chillax-Bold"],
+        "chillax-medium": ["Chillax-Medium"],
+        "chillax-semibold": ["Chillax-Semibold"],
+      },
+    },
   },
   plugins: [],
-  fontFamily: {
-    sans: ["var(--font-geist-sans)"],
-    chillax: ["Chillax-Regular"],
-      "chillax-bold": ["Chillax-Bold"],
-      "chillax-medium": ["Chillax-Medium"],
-      "chillax-semibold": ["Chillax-Semibold"],
-  },
-}
+};
