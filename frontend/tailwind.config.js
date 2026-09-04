@@ -12,6 +12,9 @@ module.exports = {
   plugins: [],
   fontFamily: {
     sans: ["var(--font-geist-sans)"],
-    chillax: ["Chillax"],
+    chillax: ["Chillax-Regular"],
+      "chillax-bold": ["Chillax-Bold"],
+      "chillax-medium": ["Chillax-Medium"],
+      "chillax-semibold": ["Chillax-Semibold"],
   },
 }

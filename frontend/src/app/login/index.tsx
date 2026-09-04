@@ -110,7 +110,7 @@ export default function LoginPage() {
                 onPress={handleLogin}
                 className="self-stretch py-4 mt-2 items-center justify-center rounded-full bg-[#7999D9]"
               >
-                <Text className="text-base font-semibold text-white">Login</Text>
+                <Text className="text-base font-semibold text-white font-chillax">Login</Text>
               </TouchableOpacity>
             </View>
           </View>
