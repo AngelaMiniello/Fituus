@@ -85,7 +85,7 @@ export const updateGoals = async (
           id: userId,
         },
       },
-      relations: ["user"],
+      relations: { user: true }
     });
 
     if (!goals) {

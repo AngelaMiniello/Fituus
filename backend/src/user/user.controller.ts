@@ -14,7 +14,7 @@ export const uploadUserMetrics = async (req: Request, res: Response) => {
     // 1. Buscamos al usuario junto con su relación Goal
     const user = await userRepository.findOne({
       where: { id: userId },
-      relations: ["goal"],
+      relations: { goal: true }
     });
 
     if (!user) {

@@ -133,7 +133,7 @@ export const deleteMeal = async (req: Request, res: Response) => {
       where: {
         id: mealId
       },
-      relations:["user"]
+      relations: { user: true }
 });
 
 if (!meal) {
