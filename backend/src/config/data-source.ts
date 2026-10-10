@@ -9,7 +9,7 @@ import { Exercise } from "../exercise/entities/exercise.entity";
 export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.DATABASE_URL,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [User, Meal, Goal, WaterEntry, Exercise],
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,

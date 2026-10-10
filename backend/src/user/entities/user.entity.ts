@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  OneToOne
-} from "typeorm";
+import {  Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne } from "typeorm";
 import { Meal } from "../../meal/entities/meal.entity";
 import { Goal } from "../../goal/entities/goal.entity";
 import { Exercise } from "../../exercise/entities/exercise.entity";
@@ -28,8 +22,11 @@ export class User {
   @Column({ unique: true })
   email!: string;
 
-  @Column()
-  password!: string;
+  @Column({ type: "varchar", nullable: true })
+  password!: string | null;
+
+  @Column({ type: "varchar", nullable: true, unique: true })
+  googleId!: string | null;
 
   @OneToMany(() => Meal, (meal) => meal.user)
   meals!: Meal[];
