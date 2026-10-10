@@ -1,17 +1,83 @@
+import { useState } from "react";
 import { useRouter } from "expo-router";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { Link } from "expo-router";
+import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from "react-native";
+import * as SecureStore from "expo-secure-store";
+import { isAxiosError } from "axios";
+import { GoogleSignin, isSuccessResponse, isErrorWithCode, statusCodes } from "@react-native-google-signin/google-signin";
+import api from "../../service/api";
+import { useAuth } from "../../context/AuthContext";
+
+GoogleSignin.configure({
+  webClientId: "TU_ID_WEB.apps.googleusercontent.com",
+});
 
 export default function RegisterOptionsView() {
-    const router = useRouter();
+  const router = useRouter();
+  const { setUserData } = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
 
-    const handleGoogleLogin = async () => {
-      console.log("Google Login");
-    };
+  const handleGoogleLogin = async () => {
+    if (googleLoading) return;
 
-    const handleRegister = () => {
-      router.push("/register/signup");
-    };
+    setGoogleLoading(true);
+
+    try {
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+
+      const result = await GoogleSignin.signIn();
+
+      if (!isSuccessResponse(result)) return;
+
+      const idToken = result.data.idToken;
+
+      if (!idToken) {
+        Alert.alert("Google", "No se obtuvo el token. Revisá el ID Web.");
+        return;
+      }
+
+      const response = await api.post("/auth/google", { idToken });
+
+      const sessionData = {
+        token: response.data.token,
+        user: response.data.user,
+      };
+
+      await SecureStore.setItemAsync(
+        "user_session",
+        JSON.stringify(sessionData)
+      );
+
+      setUserData(sessionData);
+      router.replace("/home");
+    } catch (error: unknown) {
+      if (isErrorWithCode(error)) {
+        if (
+          error.code === statusCodes.SIGN_IN_CANCELLED ||
+          error.code === statusCodes.IN_PROGRESS
+        ) {
+          return;
+        }
+
+        if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          Alert.alert("Google", "Actualizá Google Play Services.");
+          return;
+        }
+      }
+  
+      const message = isAxiosError<{ error?: string }>(error)
+        ? error.response?.data?.error ||
+          "No se pudo conectar con el servidor."
+        : error instanceof Error
+          ? error.message
+          : "No se pudo continuar con Google.";
+
+      Alert.alert("Registro con Google", message);
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
     return (
       <View style={{ flex: 1, width: "100%",  height: "100%", justifyContent: "flex-end" }}>
@@ -38,11 +104,13 @@ export default function RegisterOptionsView() {
               <TouchableOpacity
                 activeOpacity={0.8}
                 className="items-center justify-center w-full py-4 bg-black rounded-full"
-                onPress={() => {
-                  /* Lógica de Google Sign-In */
-                }}
+                onPress={handleGoogleLogin}
+                disabled={googleLoading}
+                style={{ opacity: googleLoading ? 0.6 : 1 }}
               >
-                <Text className="text-lg font-medium text-white"> Continue with Google </Text>
+                <Text className="text-lg font-medium text-white">
+                  {googleLoading ? "Conectando…" : "Continuar con Google"}
+                </Text>
               </TouchableOpacity>
 
               {/* Botón Create Account */}
