@@ -15,7 +15,7 @@ export const createMeal = async (req: Request, res: Response) => {
     const user = await userRepository.findOneBy({ id: userId });
 
     if (!user) {
-      return res.status(404).json({ error: "User no encontrado" });
+      return res.status(404).json({ error: "User not found" });
     }
 
     const newMeal = mealRepository.create({
@@ -31,7 +31,7 @@ export const createMeal = async (req: Request, res: Response) => {
   } catch (error) {
 
     console.error("EL ERROR REAL ES:", error);
-    res.status(500).json({ error: "Error creando meal" });
+    res.status(500).json({ error: "Could not log this meal" });
   }
 };
 
@@ -49,7 +49,7 @@ export const getMeals = async (req: Request, res: Response) => {
 
     res.json(meals);
   } catch (error) {
-    res.status(500).json({ error: "Error obteniendo meals" });
+    res.status(500).json({ error: "Could not load meals" });
   }
 };
 
@@ -88,7 +88,7 @@ export const getTodayMeals = async (req: Request, res: Response) => {
     });
 
   } catch (error) {
-    res.status(500).json({ error: "Error obteniendo resumen" });
+    res.status(500).json({ error: "Could not load your daily summary" });
   }
 };
 
@@ -114,7 +114,7 @@ export const searchFoods = async ( req: Request, res: Response ) => {
     console.error(error);
 
     res.status(500).json({
-      message:"Error buscando alimentos"
+      message:"Could not search for food"
     });
 
   }
@@ -138,13 +138,13 @@ export const deleteMeal = async (req: Request, res: Response) => {
 
 if (!meal) {
   return res.status(404).json({
-    error:"Meal no encontrada"
+    error:"Meal not found"
   });
 }
 
 if (meal.user.id !== userId) {
   return res.status(403).json({
-    error:"No autorizado"
+    error:"Not authorized"
   });
 }
 
@@ -180,7 +180,7 @@ export const getMealById = async ( req: Request, res: Response ) => {
 
     if(!meal){
       return res.status(404).json({
-        error:"Meal no encontrada"
+        error:"Meal not found"
       });
     }
 
@@ -191,7 +191,7 @@ export const getMealById = async ( req: Request, res: Response ) => {
     console.log(error);
 
     res.status(500).json({
-      error:"Error obteniendo meal"
+      error:"Could not load this meal"
     });
   }
 };

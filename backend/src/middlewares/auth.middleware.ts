@@ -16,7 +16,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     // Validación extra: si el token vino vacío o como "undefined" (string)
     if (!token || token === "undefined" || token === "null") {
-      return res.status(401).json({ error: "Token malformado o no provisto" });
+      return res.status(401).json({ error: "Missing or malformed authentication token" });
     }
 
     const secret = process.env.JWT_SECRET || "secret_key_fallback"; // 👈 Clave por defecto si falla el .env
@@ -31,7 +31,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     console.log("Error en authMiddleware:", error);
 
     return res.status(401).json({
-      error: "Token inválido",
+      error: "Invalid authentication token",
     });
   }
 };

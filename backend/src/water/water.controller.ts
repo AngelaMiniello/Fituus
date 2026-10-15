@@ -26,7 +26,7 @@ export const addWater = async ( req: Request, res: Response) => {
     if (!user) {
 
       return res.status(404).json({
-        error: "Usuario no encontrado",
+        error: "User not found",
       });
 
     }
@@ -45,7 +45,7 @@ export const addWater = async ( req: Request, res: Response) => {
     console.error(error);
 
     return res.status(500).json({
-      error: "Error agregando agua",
+      error: "Could not log water",
     });
 
   }
@@ -90,7 +90,7 @@ export const getTodayWater = async ( req: Request, res: Response) => {
     console.error(error);
 
     return res.status(500).json({
-      error: "Error obteniendo agua",
+      error: "Could not load water entries",
     });
 
   }

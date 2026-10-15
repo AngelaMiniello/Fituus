@@ -16,19 +16,19 @@ export const login = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
+      return res.status(404).json({ error: "User not found" });
     }
 
     if (!user.password) {
       return res.status(401).json({
-        error: "Esta cuenta usa Google. Iniciá sesión con Google."
+        error: "This account uses Google. Please sign in with Google."
       });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({ error: "Contraseña incorrecta" });
+      return res.status(401).json({ error: "Incorrect password" });
     }
 
     const token = jwt.sign(
@@ -48,7 +48,7 @@ export const login = async (req: Request, res: Response) => {
     });
 
   } catch (error) {
-    res.status(500).json({ error: "Error en login" });
+    res.status(500).json({ error: "Could not sign in" });
   }
 };
 
@@ -57,14 +57,14 @@ export const register = async (req: Request, res: Response): Promise<Response> =
     const { email, password, name } = req.body;
 
     if (!email || !password || !name) {
-      return res.status(400).json({ message: "Todos los campos son obligatorios" });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     const userRepository = AppDataSource.getRepository(User);
     const existingUser = await userRepository.findOne({ where: { email } });
 
     if (existingUser) {
-      return res.status(400).json({ message: "El usuario ya existe" });
+      return res.status(400).json({ message: "An account with this email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -88,14 +88,14 @@ export const register = async (req: Request, res: Response): Promise<Response> =
 
     // 2. Devolvemos el token junto al usuario
     return res.status(201).json({
-      message: "Usuario creado exitosamente",
+      message: "Account created successfully",
       user: userWithoutPassword,
       token // <- Token listo para usar en el frontend
     });
 
   } catch (error) {
     console.error("Error en register:", error);
-    return res.status(500).json({ message: "Error interno del servidor" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -108,7 +108,7 @@ export const googleLogin = async (
   const { idToken } = req.body;
 
   if (typeof idToken !== "string" || !idToken) {
-    return res.status(400).json({ error: "Falta el token de Google" });
+    return res.status(400).json({ error: "Google sign-in token is required" });
   }
 
   const clientId = process.env.GOOGLE_WEB_CLIENT_ID;
@@ -116,7 +116,7 @@ export const googleLogin = async (
 
   if (!clientId || !jwtSecret) {
     return res.status(500).json({
-      error: "Falta configurar la autenticación en el servidor"
+      error: "Authentication is not configured on the server"
     });
   }
 
@@ -131,13 +131,13 @@ export const googleLogin = async (
     googleUser = ticket.getPayload();
   } catch {
     return res.status(401).json({
-      error: "El token de Google no es válido o expiró"
+      error: "Your Google sign-in has expired or is invalid. Please try again."
     });
   }
 
   if (!googleUser?.sub || !googleUser.email || !googleUser.email_verified) {
     return res.status(401).json({
-      error: "Google no proporcionó un correo verificado"
+      error: "Google did not provide a verified email address"
     });
   }
 
@@ -157,7 +157,7 @@ export const googleLogin = async (
       if (existingUser) {
         return res.status(409).json({
           error:
-            "Ya tenés una cuenta con este correo. Iniciá sesión con tu contraseña para vincular Google."
+            "An account with this email already exists. Sign in with your password to link Google."
         });
       }
 
@@ -187,7 +187,7 @@ export const googleLogin = async (
     console.error("Error al iniciar sesión con Google:", error);
 
     return res.status(500).json({
-      error: "No se pudo iniciar sesión con Google"
+      error: "Could not sign in with Google"
     });
   }
 };
