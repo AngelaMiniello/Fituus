@@ -65,7 +65,7 @@ export default function ExerciseDetailView(){
     if (!exercise) {
       return (
     <ScrollView className="flex items-center justify-center min-h-screen text-white bg-zinc-950">
-      Loading...
+      <Text className="text-white">Loading...</Text>
     </ScrollView>
   );
 }

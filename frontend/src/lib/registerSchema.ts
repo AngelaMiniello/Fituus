@@ -2,31 +2,31 @@ import * as Yup from "yup";
 
 export const registerSchema = Yup.object({
   name: Yup.string()
-    .required("El nombre es obligatorio")
-    .min(2, "Debe tener al menos 2 caracteres"),
+    .required("Name is required")
+    .min(2, "Must be at least 2 characters"),
 
   username: Yup.string()
-    .required("El username es obligatorio")
-    .min(2, "Debe tener al menos 2 caracteres")
-    .max(20, "No puede superar 20 caracteres")
-    .matches(/^\S+$/, "No puede contener espacios"),
+    .required("Username is required")
+    .min(2, "Must be at least 2 characters")
+    .max(20, "Must be no more than 20 characters")
+    .matches(/^\S+$/, "Must not contain spaces"),
 
   email: Yup.string()
-    .required("Email requerido")
-    .email("Email inválido"),
+    .required("Email is required")
+    .email("Enter a valid email address"),
 
   password: Yup.string()
-    .required("Contraseña requerida")
-    .min(8, "Debe tener al menos 8 caracteres")
+    .required("Password is required")
+    .min(8, "Must be at least 8 characters")
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/,
-      "Debe incluir mayúscula, minúscula, número y carácter especial"
+      "Must include an uppercase letter, a lowercase letter, a number and a special character"
     ),
 
   confirmPassword: Yup.string()
-    .required("Confirma tu contraseña")
+    .required("Please confirm your password")
     .oneOf(
       [Yup.ref("password")],
-      "Las contraseñas no coinciden"
+      "Passwords do not match"
     ),
 });

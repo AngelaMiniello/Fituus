@@ -44,18 +44,18 @@ export default function RegisterProfileView() {
         <View className="my-auto">
           {/* Header */}
           <View>
-            <Text className="mb-4 text-3xl font-light leading-tight tracking-wide text-gray-900">
+            <Text className="mb-4 text-3xl leading-tight tracking-wide text-gray-900 font-chillax-bold">
               Add information {"\n"}to your profile
             </Text>
 
-            <Text className="mb-8 leading-relaxed text-md text-zinc-500">
+            <Text className="mb-8 leading-relaxed text-md text-zinc-600">
               This information will help us calculate customed metrics like calories,
               hydration and daily objectives.
             </Text>
           </View>
       
           {/* Card */}
-          <View className="w-full p-2 border rounded-3xl bg-pink-300/70 border-white/20">
+          <View className="w-full p-2 border rounded-3xl bg-gray-200/70 border-white/20">
 
             {/* Weight Row */}
             <TouchableOpacity

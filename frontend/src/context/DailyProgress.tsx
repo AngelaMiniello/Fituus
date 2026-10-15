@@ -1,5 +1,5 @@
 import api from "../service/api";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { Exercise } from "@/types/types";
 import { useAuth } from "./AuthContext";
 
@@ -25,15 +25,18 @@ const DailyProgressContext = createContext<DailyProgressType | null>(null);
 export function DailyProgressProvider({ children,}: { children: React.ReactNode;}) {
   const [dailyProgress, setDailyProgress] = useState<DailyProgress | null>(null);
   const { userData } = useAuth();
+  const token = userData?.token;
 
-  const fetchDailyProgress = async () => {
-     if (!userData?.token) {
+  const fetchDailyProgress = useCallback(async () => {
+     if (!token) {
       setDailyProgress(null);
       return;
     }
     
     try{
-      const res = await api.get("/dailyprogress");
+      const res = await api.get("/dailyprogress", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setDailyProgress(res.data);
     } catch (error: any) {
       const status = error?.response?.status;
@@ -49,11 +52,11 @@ export function DailyProgressProvider({ children,}: { children: React.ReactNode;
         console.error("Error al obtener el progreso diario:", error);
       }
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchDailyProgress();
-  }, []);
+  }, [fetchDailyProgress]);
     
     return (
     <DailyProgressContext.Provider value={{ dailyProgress, setDailyProgress, fetchDailyProgress }}>

@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { INTRO_STORAGE_KEY } from "@/lib/onboarding";
 import { View, ActivityIndicator } from "react-native";
 // 1. Importo useRootNavigationState
-import { Slot, SplashScreen, useRouter, useSegments, useRootNavigationState } from "expo-router";import { useFonts } from "expo-font";
+import { Slot, SplashScreen, useRouter, useSegments, useRootNavigationState, usePathname } from "expo-router";import { useFonts } from "expo-font";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AuthProvider, useAuth } from "../context/AuthContext";
@@ -15,28 +17,36 @@ SplashScreen.preventAutoHideAsync();
 
 // 1. Componente interno para controlar el flujo
 function MainContent() {
-  const { userData } = useAuth();
+  const { userData, isLoading } = useAuth();
+  const pathname = usePathname();
+  const [introSeen, setIntroSeen] = useState<boolean | null>(null);
+  useEffect(() => {
+    AsyncStorage.getItem(INTRO_STORAGE_KEY)
+      .then(value => setIntroSeen(value === "true"))
+      .catch(() => setIntroSeen(false));
+  }, [pathname]);
   const segments = useSegments();
   const router = useRouter();
   const navigationState = useRootNavigationState();
 
   // 1. Verificamos la ruta exacta o el grupo
-  const isAuthRoute = segments[0] === "login" || segments[0] === "register";
+  const isIntroRoute = (segments[0] as string) === "intro";
+  const isAuthRoute = segments[0] === "login" || segments[0] === "register" || isIntroRoute;
 
   useEffect(() => {
     if (!navigationState?.key) return;
-    if (userData === undefined) return;
+    if (isLoading || introSeen === null) return;
 
     // Si NO hay usuario y NO está en register ni login -> Redirigir al inicio del registro
     if (!userData && !isAuthRoute) {
-      router.replace("/register");
+      router.replace(introSeen ? "/register" : "/intro" as any);
     } 
     // Si SÍ hay usuario completo y quiere entrar a /login o a /register (el inicio), lo mandamos a home.
     // OJO: Si estás en /register/profile no te tiene que sacar.
-    else if (userData && (segments[0] === "login" || (segments[0] === "register" && segments.length === 1))) {
+    else if (userData && (isIntroRoute || segments[0] === "login" || (segments[0] === "register" && segments.length === 1))) {
       router.replace("/");
     }
-  }, [userData, segments, navigationState?.key]);
+  }, [userData, isLoading, introSeen, segments, navigationState?.key, router, isAuthRoute, isIntroRoute]);
 
   // Si no hay userData (o estás en medio del flujo de register sin context)
   if (!userData) {
@@ -61,6 +71,8 @@ function MainContent() {
 
 // 2. Componente principal exportado
 export default function RootLayout() {
+  const pathname = usePathname();
+  const isHome = pathname === "/" || pathname === "/home" || (pathname === "/diary" || pathname === "/progress" || pathname === "/profile" || pathname === "/config" || pathname === "/dashboard" || pathname === "/wins") || pathname === "/intro";
   
   const [loaded, error] = useFonts({
   'Chillax-Regular': require('../../assets/fonts/Chillax-Regular.otf'),
@@ -85,7 +97,7 @@ export default function RootLayout() {
     <AuthProvider>
       <GoalsProvider>
         <DailyProgressProvider>
-          <SafeAreaView className="flex-1 bg-zinc-950">
+          <SafeAreaView className={`flex-1 ${isHome ? (pathname === "/intro" ? "bg-[#DDEAF4]" : "bg-[#7999D9]") : "bg-zinc-950"}`}>
             <MainContent />
           </SafeAreaView>
         </DailyProgressProvider>

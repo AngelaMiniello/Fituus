@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "frontend",
+    "name": "fituus",
     "slug": "fituus",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/branding/fituus-icon-v2.png",
     "scheme": "frontend",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/branding/fituus-icon-v2.png",
       "bundleIdentifier": "com.angelaminiello.fituus",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
@@ -16,17 +16,16 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/branding/fituus-icon-foreground-v2.png",
+        "monochromeImage": "./assets/branding/fituus-icon-foreground-v2.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.angelaminiello.fituus"
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/branding/fituus-icon-v2.png"
     },
     "plugins": [
       "expo-router",

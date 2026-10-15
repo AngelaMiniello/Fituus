@@ -99,11 +99,11 @@ export default function RegisterGoalsView() {
           <View className="my-auto">
             {/* Header text */}
             <View>
-              <Text className="mb-4 text-3xl font-light leading-tight tracking-wide text-gray-900">
+              <Text className="mb-3 text-3xl leading-tight tracking-wide text-gray-900 font-chillax-bold">
                 Add your goal
               </Text>
 
-              <Text className="mb-8 leading-relaxed text-md text-zinc-500">
+              <Text className="mb-8 leading-relaxed text-md text-zinc-700">
                 This information will help us calculate customed metrics like calories,
                 hydration and daily objectives.
               </Text>
@@ -119,14 +119,14 @@ export default function RegisterGoalsView() {
                 return (
                   <View
                     key={option.value}
-                    className="overflow-hidden border rounded-3xl bg-pink-300/70 border-white/20"
+                    className="overflow-hidden border rounded-3xl bg-gray-200/70 border-white/20"
                   >
 
                     <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => setGoal(option.value)}
                     className={`w-full p-6 items-center justify-center ${
-                      isSelected ? "bg-white/40" : "bg-transparent"
+                      isSelected ? "bg-white/50" : "bg-transparent"
                     }`}
                   >
 
@@ -138,7 +138,7 @@ export default function RegisterGoalsView() {
                   
                       <Text
                         className={`text-lg font-semibold capitalize ${
-                          isSelected ? "text-[#7999D9]" : "text-gray-900"
+                          isSelected ? "text-gray-700" : "text-gray-900"
                         }`}
                       >
                         {option.value}

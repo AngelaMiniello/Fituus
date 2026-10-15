@@ -1,5 +1,4 @@
 import api from "../service/api";
-import * as SecureStore from 'expo-secure-store';
 import { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 
@@ -10,7 +9,7 @@ interface Goals {
   fatGoal: number;
   waterGoal: number;
   stepsGoal: number;
-  workoutsPerWeekGoal: number;
+  workoutsPerWeek: number;
   sleepGoal: number;
 }
 
@@ -18,6 +17,8 @@ interface GoalsContextType {
   goals: Goals | null;
   setGoals: React.Dispatch<React.SetStateAction<Goals | null>>;
   fetchGoals: () => Promise<void>;
+  loading: boolean;
+  error: boolean;
 }
 
 const GoalsContext = createContext<GoalsContextType | null>(null);
@@ -25,6 +26,8 @@ const GoalsContext = createContext<GoalsContextType | null>(null);
 export function GoalsProvider({ children,}: { children: React.ReactNode;}) {
   
   const [goals, setGoals] = useState<Goals | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const { userData, isLoading } = useAuth();
 
  const fetchGoals = async () => {
@@ -34,13 +37,17 @@ export function GoalsProvider({ children,}: { children: React.ReactNode;}) {
     // 🛑 si ya terminó de buscar y no hay token, reseteo las metas
     if (!userData?.token) {
       setGoals(null);
+      setLoading(false);
       return;
     }
 
+    setLoading(true);
+    setError(false);
     try {
       const res = await api.get("/goals");
       setGoals(res.data);
     } catch (error: any) {
+      setError(true);
       const status = error?.response?.status;
 
       if (status === 404) {
@@ -52,7 +59,7 @@ export function GoalsProvider({ children,}: { children: React.ReactNode;}) {
       } else {
         console.error("Error al obtener las metas:", error);
       }
-    }
+    } finally { setLoading(false); }
   };
 
   //EL CAMBIO IMPORTANTE ESTÁ ACÁ ABAJO
@@ -61,7 +68,7 @@ export function GoalsProvider({ children,}: { children: React.ReactNode;}) {
   }, [isLoading, userData?.token]);
 
   return (
-    <GoalsContext.Provider value={{ goals, setGoals, fetchGoals }}>
+    <GoalsContext.Provider value={{ goals, setGoals, fetchGoals, loading, error }}>
       {children}
     </GoalsContext.Provider>
   );

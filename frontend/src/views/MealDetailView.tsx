@@ -14,16 +14,7 @@ export default function MealDetailView(){
   useEffect(() => {
     const fetchMeal = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        const res = await api.get(
-          `/meals/${params.id}`,
-          {
-            headers:{
-              Authorization:`Bearer ${token}`
-            }
-          }
-        );
+        const res = await api.get(`/meals/${params.id}`);
 
         setMeal(res.data);
         setQuantity(res.data.quantity);
@@ -39,22 +30,15 @@ export default function MealDetailView(){
   }, []);
 
   if(!meal){
-    return <p className="text-white">Details not found</p>;
+    return <Text className="text-white">Details not found</Text>;
   }
 
   const handleUpdateMeal = async () => {
     try {
-      const token = localStorage.getItem("token");
-
       const res = await api.put(
         `/meals/${params.id}`,
           {
             quantity
-          },
-          {
-            headers:{
-              Authorization:`Bearer ${token}`
-            }
           }
       );
 

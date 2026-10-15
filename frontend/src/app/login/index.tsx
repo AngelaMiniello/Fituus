@@ -2,11 +2,12 @@ import { useState } from "react";
 import api from "../../service/api";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../context/AuthContext";
-import { View, Text, TouchableOpacity, TextInput, Image, StyleSheet, ScrollView, Alert } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Image, StyleSheet, ScrollView, Alert, ActivityIndicator } from "react-native";
+import Svg, { Path } from "react-native-svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Mail, Eye, EyeOff } from "lucide-react-native";
 import * as SecureStore from "expo-secure-store";
-import { GoogleSignin, GoogleSigninButton, isSuccessResponse, isErrorWithCode, statusCodes } from "@react-native-google-signin/google-signin";
+import { GoogleSignin, isSuccessResponse, isErrorWithCode, statusCodes } from "@react-native-google-signin/google-signin";
 import { isAxiosError } from "axios";
 
 GoogleSignin.configure({
@@ -67,7 +68,7 @@ export default function LoginPage() {
       if (!idToken) {
         Alert.alert(
           "Google",
-          "No se obtuvo el token. Revisá el ID Web configurado."
+          "Google did not return a sign-in token. Please try again."
         );
         return;
       }
@@ -95,7 +96,7 @@ export default function LoginPage() {
         if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
           Alert.alert(
             "Google",
-            "Actualizá Google Play Services para iniciar sesión."
+            "Please update Google Play Services to sign in."
           );
           return;
         }
@@ -103,12 +104,12 @@ export default function LoginPage() {
 
       const message = isAxiosError<{ error?: string }>(error)
         ? error.response?.data?.error ||
-          "No se pudo conectar con el servidor."
+          "Could not connect to the server."
         : error instanceof Error
           ? error.message
-          : "No se pudo iniciar sesión con Google.";
+          : "Could not sign in with Google.";
 
-      Alert.alert("Inicio de sesión", message);
+      Alert.alert("Sign in", message);
     } finally {
       setGoogleLoading(false);
     }
@@ -138,7 +139,7 @@ export default function LoginPage() {
             <Text className="text-3xl leading-tight tracking-wide text-gray-900 font-chillax-bold ">Login</Text>
           </View>
 
-          <View className="w-full p-4 border rounded-3xl bg-pink-300/70 border-white/20">  
+          <View className="w-full p-4 border rounded-3xl bg-gray-200/70 border-white/20">
             <View className="flex-col gap-2">
               <View>
                 <View className="relative items-center justify-center mb-3">
@@ -187,20 +188,28 @@ export default function LoginPage() {
                 <Text className="text-lg font-bold text-white font-chillax">Login</Text>
               </TouchableOpacity>
 
-              <View style={{ alignItems: "center", marginTop: 16 }}>
-                <GoogleSigninButton
-                  size={GoogleSigninButton.Size.Wide}
-                  color={GoogleSigninButton.Color.Light}
-                  onPress={handleGoogleLogin}
-                  disabled={googleLoading}
-                />
-
-  {googleLoading && (
-    <Text style={{ marginTop: 8 }}>
-      Conectando con Google…
-    </Text>
-  )}
-</View>
+              <TouchableOpacity
+                onPress={handleGoogleLogin}
+                disabled={googleLoading}
+                activeOpacity={0.75}
+                accessibilityRole="button"
+                accessibilityLabel="Continue with Google"
+                accessibilityState={{ disabled: googleLoading, busy: googleLoading }}
+                style={{ opacity: googleLoading ? 0.65 : 1 }}
+                className="flex-row items-center justify-center w-full px-4 py-4 mt-3 border border-white rounded-full bg-white/85"
+              >
+                {googleLoading ? <ActivityIndicator size="small" color="#4769A8" /> : (
+                  <Svg width={20} height={20} viewBox="0 0 24 24" accessible={false}>
+                    <Path fill="#4285F4" d="M22.56 12.25c0-.73-.06-1.42-.19-2.09H12v3.96h5.92a5.06 5.06 0 0 1-2.2 3.32v2.76h3.56c2.08-1.92 3.28-4.75 3.28-7.95Z" />
+                    <Path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.8l-3.56-2.76c-.98.66-2.23 1.06-3.72 1.06-2.87 0-5.3-1.94-6.17-4.55H2.15v2.85A11 11 0 0 0 12 23Z" />
+                    <Path fill="#FBBC05" d="M5.83 13.95A6.6 6.6 0 0 1 5.48 12c0-.68.12-1.34.35-1.95V7.2H2.15A11 11 0 0 0 1 12c0 1.78.42 3.47 1.15 4.8l3.68-2.85Z" />
+                    <Path fill="#EA4335" d="M12 5.5c1.62 0 3.07.56 4.21 1.64l3.16-3.16A10.56 10.56 0 0 0 12 1a11 11 0 0 0-9.85 6.2l3.68 2.85C6.7 7.44 9.13 5.5 12 5.5Z" />
+                  </Svg>
+                )}
+                <Text style={{ fontFamily: "Chillax-Medium" }} className="ml-3 text-base text-gray-900">
+                  {googleLoading ? "Connecting..." : "Continue with Google"}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

@@ -4,7 +4,6 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { Eye, EyeOff, User, AtSign, Mail, Lock, UserCircle2, ChevronRight } from "lucide-react-native";
 import { View, Text, TouchableOpacity, ImageBackground, ScrollView, TextInput} from "react-native";
-
 import { registerSchema } from "../lib/registerSchema";
 import { register } from "../service/authService";
 import { IRegisterProps } from "../types/types";
@@ -53,13 +52,13 @@ export default function RegisterView() {
 
         {/* Title Header */}
         <View className="items-center w-full mb-8">
-          <Text className="text-2xl font-bold tracking-wide text-center text-gray-900">
-            PERSONAL INFORMATION
+          <Text className="text-2xl tracking-wide text-center text-gray-900 font-chillax-bold">
+            {"PERSONAL\nINFORMATION"}
           </Text>
         </View>
      
         {/* Card Form Wrapper */}
-        <View className="w-full p-4 border rounded-3xl bg-pink-300/60 border-white/20">        
+        <View className="w-full p-4 border rounded-3xl bg-gray-200/70 border-white/20">        
           <Formik
             onSubmit={handleSubmit}
             initialValues={{

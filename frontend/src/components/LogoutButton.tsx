@@ -10,9 +10,11 @@ export default function LogoutButton() {
     <TouchableOpacity
       onPress={handleLogout}
       activeOpacity={0.7}
-      className="flex-row items-center px-4 py-2 space-x-2 border bg-red-500/10 border-red-500/30 rounded-2xl"
+      accessibilityRole="button"
+      accessibilityLabel="Log out"
+      className="items-center justify-center px-4 py-2 border border-white/30 bg-white/15 rounded-2xl"
     >
-      <LogOut size={18} color="#ef4444" />
+      <LogOut size={18} color="#FFFFFF" />
     </TouchableOpacity>
   );
 }

@@ -16,7 +16,7 @@ async function parseResponseSafely(response: Response) {
   }
 
   const text = await response.text();
-  return { message: text || "Respuesta no válida del servidor" };
+  return { message: text || "Invalid server response" };
 }
 
 // 1. Servicio de Login
@@ -34,11 +34,11 @@ export async function loginService(userData: ILoginProps) {
       return await parseResponseSafely(response);
     } else {
       const errorData = await parseResponseSafely(response);
-      throw new Error(errorData.message || "Fallo el servidor al loguearse");
+      throw new Error(errorData.message || "Could not sign in");
     }
   } catch (error: any) {
     // Preservar el mensaje de error original
-    throw new Error(error.message || "Error al conectar con el servidor");
+    throw new Error(error.message || "Could not connect to the server");
   }
 }
 
@@ -66,10 +66,10 @@ export async function register(userData: IRegisterProps) {
       return await parseResponseSafely(response);
     } else {
       const errorData = await parseResponseSafely(response);
-      throw new Error(errorData.message || "Error en el registro");
+      throw new Error(errorData.message || "Could not create your account");
     }
   } catch (error: any) {
-    throw new Error(error.message || "No fue posible registrar el usuario");
+    throw new Error(error.message || "Could not create your account");
   }
 }
 
@@ -85,7 +85,7 @@ export const updateProfile = async (data: IProfileSetup, token?: string) => {
   } catch (error: any) {
     console.log("📌 Error HTTP en updateProfile:", error?.response?.status);
     console.log("📌 Detalle Backend:", error?.response?.data);
-    const message = error.response?.data?.message || "Error al actualizar el perfil";
+    const message = error.response?.data?.message || "Could not update your profile";
     throw new Error(message);
   }
 };

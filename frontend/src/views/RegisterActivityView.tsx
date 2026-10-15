@@ -58,7 +58,7 @@ export default function RegisterActivityView() {
         <View className="my-auto">
           {/* Header */}
           <View>
-            <Text className="mb-4 text-3xl font-light leading-tight tracking-wide text-gray-900">
+            <Text className="mb-4 text-3xl leading-tight tracking-wide text-gray-900 font-chillax-bold">
               Add your {"\n"}activity level
             </Text>
 
@@ -69,7 +69,7 @@ export default function RegisterActivityView() {
           </View>
       
           {/* Card */}
-          <View className="w-full p-4 border rounded-3xl bg-pink-300/70 border-white/20">
+          <View className="w-full p-4 border rounded-3xl bg-gray-200/70 border-white/20">
           {options.map((option) => {
             const isSelected = activityLevel === option;
 
@@ -78,13 +78,13 @@ export default function RegisterActivityView() {
                 key={option}
                 activeOpacity={0.8}
                 onPress={() => setActivityLevel(option)}
-                className={`w-full rounded-xl px-2 py-4 my-1 items-center justify-center ${
-                  isSelected ? "bg-white/40" : "bg-transparent"
+                className={`w-full border-b border-[#F2F2F2]/40 rounded-xl px-2 py-4 my-1 items-center justify-center ${
+                  isSelected ? "bg-white/30" : "bg-transparent"
                 }`}
               >
                 <Text
                   className={`text-lg font-semibold capitalize ${
-                    isSelected ? "text-[#7999D9]" : "text-gray-900"
+                    isSelected ? "text-gray-700" : "text-gray-900"
                   }`}
                 >
                   {option}

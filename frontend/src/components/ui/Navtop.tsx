@@ -9,16 +9,16 @@ export default function Navtop() {
   const initial = userData?.user?.name?.[0]?.toUpperCase() || "?";
     
   return (
-    <View className="w-full px-3 py-2 bg-zinc-900">
+    <View className="w-full px-6 py-3 bg-[#7999D9]">
       <View className="flex-row items-center justify-between">
-        <Text className="text-base text-center font-chillax text-slate-50">
+        <Text className="text-lg text-center text-white font-chillax-semibold">
           fituus
         </Text> 
         
-        <Link href="/dashboard" asChild>
-          <TouchableOpacity activeOpacity={0.8}>
-            <View className="flex items-center justify-center bg-[#88B6F2] rounded-full w-9 h-9">
-              <Text className="font-semibold text-white">
+        <Link href="/profile" asChild>
+          <TouchableOpacity activeOpacity={0.8} accessibilityLabel="Open profile">
+            <View className="items-center justify-center border border-white/40 rounded-full bg-white/20 w-9 h-9">
+              <Text style={{ fontFamily: "Chillax-Semibold" }} className="text-white">
                 {initial}
               </Text>
             </View>

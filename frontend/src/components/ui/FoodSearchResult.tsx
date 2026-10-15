@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import api from "@/service/api";
 
 //si uso Expo / React Native puro para la URL del backend
-const API_URL = process.env.EXPO_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL;
 
 type FoodProps = {
   food: any;
@@ -39,11 +37,8 @@ export default function FoodSearchResult({ food, onFoodAdded, mealType, quantity
     try {
       setLoading(true);
 
-      // En React Native leo el token guardado en AsyncStorage
-      const token = await AsyncStorage.getItem("token");
-
-      await axios.post(
-        `${API_URL}/meals`,
+      await api.post(
+        "/meals",
         {
           name: food.description,
           calories,
@@ -56,48 +51,43 @@ export default function FoodSearchResult({ food, onFoodAdded, mealType, quantity
           baseProtein,
           baseCarbs,
           baseFat,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         }
       );
 
       onFoodAdded();
     } catch (error) {
       console.log("Error al guardar comida:", error);
-      Alert.alert("Error", "No se pudo registrar el alimento");
+      Alert.alert("Error", "Could not log this food. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View className="p-4 mb-3 border rounded-2xl bg-zinc-800 border-zinc-700">
-      <Text className="text-base font-semibold text-white">
+    <View className="p-4 mb-3 border rounded-2xl bg-[#E3AA88]/20 border-white">
+      <Text style={{ fontFamily: "Chillax-Semibold" }} className="text-base  text-gray-900">
         {food.description}
       </Text>
 
-      <View className="flex-row gap-4 mt-2">
-        <Text className="text-sm font-medium text-zinc-400">
+      <View className="flex-row flex-wrap gap-2 mt-2">
+        <Text style={{ fontFamily: "Chillax-Medium" }} className="text-sm  text-zinc-600">
           {Math.round(calories)} kcal
         </Text>
-        <Text className="text-sm text-zinc-400">P: {protein.toFixed(1)}g</Text>
-        <Text className="text-sm text-zinc-400">C: {carbs.toFixed(1)}g</Text>
-        <Text className="text-sm text-zinc-400">F: {fat.toFixed(1)}g</Text>
+        <Text style={{ fontFamily: "Chillax-Regular" }} className="text-sm text-zinc-600">P: {protein.toFixed(1)}g</Text>
+        <Text style={{ fontFamily: "Chillax-Regular" }} className="text-sm text-zinc-600">C: {carbs.toFixed(1)}g</Text>
+        <Text style={{ fontFamily: "Chillax-Regular" }} className="text-sm text-zinc-600">F: {fat.toFixed(1)}g</Text>
       </View>
 
       <TouchableOpacity
         onPress={handleAddFood}
         disabled={loading}
         activeOpacity={0.8}
-        className="mt-3 w-full py-3 rounded-xl bg-[#7999D9] items-center justify-center"
+        className="mt-3 w-full py-3 rounded-full bg-[#7797D9] items-center justify-center"
       >
         {loading ? (
           <ActivityIndicator color="#FFFFFF" size="small" />
         ) : (
-          <Text className="font-semibold text-center text-white">Add</Text>
+          <Text style={{ fontFamily: "Chillax-Semibold" }} className=" text-center text-gray-900">Add</Text>
         )}
       </TouchableOpacity>
     </View>

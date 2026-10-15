@@ -1,6 +1,6 @@
 import { Droplets, Footprints, Dumbbell, Flame, Weight,} from "lucide-react-native";
 import React from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text } from "react-native";
 import { ProgressRing } from "./ProgressRing";
 //contexts 
 import { useGoals } from "@/context/GoalsContext";
@@ -30,7 +30,7 @@ export default function HealthOverview() {
   const exerciseGoal = (goals as any)?.exerciseGoal || 60; 
   const exerciseMinutes = dailyProgress?.exerciseMinutes || 0;
   const exercisePercentage = Math.min((exerciseMinutes / exerciseGoal) * 100, 100);
-  const caloriesBurned = dailyProgress?.caloriesBurned || 0;
+  
   
   // Lista de ejercicios reales
   const exerciseEntries = dailyProgress?.exercises || [];
@@ -41,62 +41,62 @@ export default function HealthOverview() {
   const targetWeight = (userData?.user as any)?.targetWeight || null;
 
   return (
-    <ScrollView className="flex-1 bg-black" contentContainerStyle={{ padding: 12, paddingBottom: 150, gap: 16}}>
+    <View className="gap-5">
       
       {/* 1. CARD AGUA */}
-      <View className="p-5 shadow-xl rounded-3xl bg-zinc-900">
+      <View className="p-5 border rounded-3xl bg-white/70 border-white/60">
         <View className="flex-row items-start justify-between">
           <View>
-            <Text className="text-xl font-semibold text-white">Hidratación</Text>
-            <Text className="mt-1 text-sm text-zinc-400">Consumo registrado</Text>
+            <Text className="text-xl text-gray-900 font-chillax-semibold">Hydration</Text>
+            <Text className="mt-1 text-sm font-chillax text-zinc-600">Logged intake</Text>
           </View>
           <View className="p-3 rounded-2xl bg-cyan-500/10">
-            <Droplets size={22} color="#22d3ee" />
+            <Droplets size={22} color="#7999D9" />
           </View>
         </View>
 
         <View className="items-center mt-8">
-          <ProgressRing percentage={waterPercentage} color="#67e8f9">
-            <Text className="text-4xl font-bold text-white">
-              {(waterConsumed / 1000).toFixed(1)}L
+          <ProgressRing trackColor="#FFFFFF" percentage={waterPercentage} color="#7999D9">
+            <Text className="text-4xl text-gray-900 font-chillax-bold">
+              {(waterConsumed / 1000).toFixed(2)} L
             </Text>
-            <Text className="text-sm text-zinc-400">
-              de {(waterGoal / 1000).toFixed(1)}L
+            <Text className="text-sm font-chillax text-zinc-600">
+              of {(waterGoal / 1000).toFixed(1)}L
             </Text>
           </ProgressRing>
         </View>
       </View>
 
       {/* 2. CARD PASOS */}
-      <View className="p-5 shadow-xl rounded-3xl bg-zinc-900">
+      <View className="p-5 border rounded-3xl bg-white/70 border-white/60">
         <View className="flex-row items-start justify-between">
           <View>
-            <Text className="text-xl font-semibold text-white">Pasos</Text>
-            <Text className="mt-1 text-sm text-zinc-400">Pasos registrados</Text>
+            <Text className="text-xl text-gray-900 font-chillax-semibold">Steps</Text>
+            <Text className="mt-1 text-sm font-chillax text-zinc-600">Registered steps</Text>
           </View>
-          <View className="p-3 rounded-2xl bg-[#F2B47E]/10">
-            <Footprints size={22} color="#F2B47E" />
+          <View className="p-3 rounded-2xl bg-[#7999D9]/10">
+            <Footprints size={22} color="#7999D9" />
           </View>
         </View>
 
         <View className="items-center mt-8">
-          <ProgressRing percentage={stepsPercentage} color="#F2B47E">
-            <Text className="text-4xl font-bold text-white">
+          <ProgressRing trackColor="#FFFFFF" percentage={stepsPercentage} color="#7999D9">
+            <Text className="text-4xl text-gray-900 font-chillax-bold">
               {stepsDone.toLocaleString()}
             </Text>
-            <Text className="text-sm text-zinc-400">
-              de {stepsGoal.toLocaleString()}
+            <Text className="text-sm font-chillax text-zinc-600">
+              of {stepsGoal.toLocaleString()}
             </Text>
           </ProgressRing>
         </View>
       </View>
 
       {/* 3. CARD EJERCICIO */}
-      <View className="p-5 shadow-xl rounded-3xl bg-zinc-900">
+      <View className="p-5 border rounded-3xl bg-white/70 border-white/60">
         <View className="flex-row items-start justify-between">
           <View>
-            <Text className="text-xl font-semibold text-white">Ejercicio</Text>
-            <Text className="mt-1 text-sm text-zinc-400">Actividad del día</Text>
+            <Text className="text-xl text-gray-900 font-chillax-semibold">Exercise</Text>
+            <Text className="mt-1 text-sm font-chillax text-zinc-600">Today's activity</Text>
           </View>
           <View className="p-3 rounded-2xl bg-[#D9667B]/10">
             <Dumbbell size={22} color="#D9667B" />
@@ -104,9 +104,9 @@ export default function HealthOverview() {
         </View>
 
         <View className="items-center mt-8">
-          <ProgressRing percentage={exercisePercentage} color="#D9667B">
-            <Text className="text-4xl font-bold text-white">{exerciseMinutes}</Text>
-            <Text className="text-sm text-zinc-400">de {exerciseGoal} min</Text>
+          <ProgressRing trackColor="#FFFFFF" percentage={exercisePercentage} color="#D9667B">
+            <Text className="text-4xl text-gray-900 font-chillax-bold">{exerciseMinutes}</Text>
+            <Text className="text-sm font-chillax text-zinc-600">of {exerciseGoal} min</Text>
           </ProgressRing>
         </View>
 
@@ -116,17 +116,17 @@ export default function HealthOverview() {
             {exerciseEntries.map((exercise: any, index: number) => (
               <View
                 key={index}
-                className="flex-row items-center justify-between p-4 rounded-2xl bg-zinc-800/70"
+                className="flex-row items-center justify-between p-4 rounded-2xl bg-white/50"
               >
                 <View>
-                  <Text className="font-medium text-white">{exercise.type}</Text>
-                  <Text className="text-sm text-zinc-400">{exercise.minutes} min</Text>
+                  <Text className="text-gray-900 font-chillax-medium">{exercise.type}</Text>
+                  <Text className="text-sm font-chillax text-zinc-600">{exercise.minutes} min</Text>
                 </View>
                 <View className="items-end">
-                  <Text className="font-semibold text-[#D9667B]">
+                  <Text className="font-chillax-semibold text-[#D9667B]">
                     {exercise.calories} kcal
                   </Text>
-                  <Text className="text-xs text-zinc-500">quemadas</Text>
+                  <Text className="text-xs font-chillax text-zinc-500">burned</Text>
                 </View>
               </View>
             ))}
@@ -134,10 +134,10 @@ export default function HealthOverview() {
         )}
 
         {/* Total Calorías */}
-        <View className="p-4 mt-5 rounded-2xl bg-[#D9667B]">
+        <View className="p-4 mt-5 rounded-2xl bg-pink-200/70">
           <View className="flex-row items-center justify-between">
-            <Text className="text-zinc-200">Calorías totales</Text>
-            <Text className="text-lg font-bold text-white">
+            <Text className="text-gray-900 font-chillax">Total calories burned</Text>
+            <Text className="text-lg text-gray-900 font-chillax-bold">
               {totalCalories} kcal
             </Text>
           </View>
@@ -145,39 +145,38 @@ export default function HealthOverview() {
       </View>
 
       {/* 4. CARD PESO */}
-      <View className="p-5 shadow-xl rounded-3xl bg-zinc-900">
+      <View className="p-5 border rounded-3xl bg-white/70 border-white/60">
         <View className="flex-row items-start justify-between">
           <View>
-            <Text className="text-xl font-semibold text-white">Último peso</Text>
-            <Text className="mt-1 text-sm text-zinc-400">Registro más reciente</Text>
+            <Text className="text-xl text-gray-900 font-chillax-semibold">Latest weight</Text>
+            <Text className="mt-1 text-sm font-chillax text-zinc-600">Most recent entry</Text>
           </View>
-          <View className="p-3 rounded-2xl bg-[#6289D9]/10">
-            <Weight size={22} color="#6289D9" />
+          <View className="p-3 rounded-2xl bg-[#7999D9]/10">
+            <Weight size={22} color="#7999D9" />
           </View>
         </View>
 
         <View className="items-center justify-center mt-10">
-          <View className="items-center justify-center px-8 py-6 rounded-full bg-[#6289D9] w-44 h-44">
-            <Text className="text-5xl font-bold text-center text-white">{currentWeight}</Text>
-            <Text className="mt-1 text-center text-zinc-200">kg</Text>
+          <View className="items-center justify-center px-8 py-6 rounded-full bg-[#7999D9] w-44 h-44">
+            <Text className="text-5xl text-center text-gray-900 font-chillax-bold">{currentWeight || "—"}</Text>
+            <Text className="mt-1 text-center text-gray-900 font-chillax">kg</Text>
           </View>
 
-          <View className="items-center px-5 py-3 mt-6 rounded-2xl bg-zinc-800/70">
-            <Text className="text-sm text-zinc-400">Última actualización</Text>
-            <Text className="mt-1 font-medium text-white">DATE</Text>
+          <View className="items-center px-5 py-3 mt-6 rounded-2xl bg-white/50">
+            <Text className="text-sm font-chillax text-zinc-600">Profile weight</Text>
           </View>
 
-          <View className="flex-row gap-3 mt-6">
-            <View className="px-4 py-2 rounded-xl bg-[#6289D9]">
-              <Text className="text-sm font-medium text-white">LOST WEIGHT</Text>
+          {targetWeight != null && <View className="flex-row gap-3 mt-6">
+            <View className="px-4 py-2 rounded-xl bg-[#7999D9]">
+              <Text className="text-sm text-gray-900 font-chillax-medium">Target weight</Text>
             </View>
-            <View className="px-4 py-2 rounded-xl bg-[#6289D9]">
-              <Text className="text-sm font-medium text-white">{targetWeight}</Text>
+            <View className="px-4 py-2 rounded-xl bg-[#7999D9]">
+              <Text className="text-sm text-gray-900 font-chillax-medium">{targetWeight} kg</Text>
             </View>
-          </View>
+          </View>}
         </View>
       </View>
 
-    </ScrollView>
+    </View>
   );
 }

@@ -4,11 +4,11 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from "react-na
 import * as SecureStore from "expo-secure-store";
 import { isAxiosError } from "axios";
 import { GoogleSignin, isSuccessResponse, isErrorWithCode, statusCodes } from "@react-native-google-signin/google-signin";
-import api from "../../service/api";
-import { useAuth } from "../../context/AuthContext";
+import api from "@/service/api";
+import { useAuth } from "@/context/AuthContext";
 
 GoogleSignin.configure({
-  webClientId: "TU_ID_WEB.apps.googleusercontent.com",
+  webClientId: "518195228268-j7p8abmfbgfoblv08r073g0prvi01uvq.apps.googleusercontent.com",
 });
 
 export default function RegisterOptionsView() {
@@ -33,7 +33,7 @@ export default function RegisterOptionsView() {
       const idToken = result.data.idToken;
 
       if (!idToken) {
-        Alert.alert("Google", "No se obtuvo el token. Revisá el ID Web.");
+        Alert.alert("Google", "Google did not return a sign-in token. Please try again.");
         return;
       }
 
@@ -61,19 +61,19 @@ export default function RegisterOptionsView() {
         }
 
         if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-          Alert.alert("Google", "Actualizá Google Play Services.");
+          Alert.alert("Google", "Please update Google Play Services.");
           return;
         }
       }
   
       const message = isAxiosError<{ error?: string }>(error)
         ? error.response?.data?.error ||
-          "No se pudo conectar con el servidor."
+          "Could not connect to the server."
         : error instanceof Error
           ? error.message
-          : "No se pudo continuar con Google.";
+          : "Could not continue with Google.";
 
-      Alert.alert("Registro con Google", message);
+      Alert.alert("Sign up with Google", message);
     } finally {
       setGoogleLoading(false);
     }
@@ -109,7 +109,7 @@ export default function RegisterOptionsView() {
                 style={{ opacity: googleLoading ? 0.6 : 1 }}
               >
                 <Text className="text-lg font-medium text-white">
-                  {googleLoading ? "Conectando…" : "Continuar con Google"}
+                  {googleLoading ? "Connecting…" : "Continue with Google"}
                 </Text>
               </TouchableOpacity>
 
@@ -135,6 +135,6 @@ export default function RegisterOptionsView() {
             </View>
 
           </View>
-       </View>
+      </View>
   );
 }
