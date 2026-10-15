@@ -2,11 +2,16 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../config/data-source";
 import { User } from "../user/entities/user.entity";
 import { Goal } from "../goal/entities/goal.entity";
+import { WeightEntry } from "./entities/weight-entry.entity";
 
 export const uploadUserMetrics = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
     const { weight, height, gender, activityLevel, goal } = req.body;
+    if (weight !== undefined && weight !== null &&
+      (!Number.isFinite(Number(weight)) || Number(weight) <= 0 || Number(weight) >= 1000)) {
+      return res.status(400).json({ message: "Enter a valid weight in kg" });
+    }
 
     const userRepository = AppDataSource.getRepository(User);
     const goalRepository = AppDataSource.getRepository(Goal);
@@ -20,6 +25,7 @@ export const uploadUserMetrics = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    const previousWeight = user.weight;
 
     // 2. Métrica de números (evitando NaN)
     if (weight !== undefined && weight !== null && !isNaN(Number(weight))) {
@@ -56,7 +62,15 @@ export const uploadUserMetrics = async (req: Request, res: Response) => {
     }
 
     // 5. Guardamos la entidad User con las métricas actualizadas
-    await userRepository.save(user);
+    await AppDataSource.transaction(async manager => {
+      await manager.save(User, user);
+      if (weight !== undefined && weight !== null) {
+        const hasHistory = await manager.exists(WeightEntry, { where: { user: { id: userId } } });
+        if (!hasHistory || previousWeight !== user.weight) {
+          await manager.save(WeightEntry, manager.create(WeightEntry, { weight: user.weight, user }));
+        }
+      }
+    });
 
     return res.status(200).json({
       message: "Metrics and goals updated successfully",
