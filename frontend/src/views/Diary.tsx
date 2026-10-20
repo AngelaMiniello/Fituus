@@ -69,6 +69,7 @@ export default function DiaryRegister() {
 
       const res = await api.get("/meals/today",
         {
+          params: { utcOffsetMinutes: new Date().getTimezoneOffset() },
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -310,6 +311,8 @@ export default function DiaryRegister() {
         <MealSection
           title="Breakfast"
           meals={breakfastMeals}
+          mealType="breakfast"
+          onRepeated={fetchMeals}
           onDelete={handleDeleteMeal}
           onAdd={() => {
             setSelectedMealType("breakfast");
@@ -320,6 +323,8 @@ export default function DiaryRegister() {
         <MealSection
           title="Lunch"
           meals={lunchMeals}
+          mealType="lunch"
+          onRepeated={fetchMeals}
           onDelete={handleDeleteMeal}
           onAdd={() => {
             setSelectedMealType("lunch");
@@ -330,6 +335,8 @@ export default function DiaryRegister() {
         <MealSection
           title="Dinner"
           meals={dinnerMeals}
+          mealType="dinner"
+          onRepeated={fetchMeals}
           onDelete={handleDeleteMeal}
           onAdd={() => {
             setSelectedMealType("dinner");
@@ -340,6 +347,8 @@ export default function DiaryRegister() {
         <MealSection
           title="Snack"
           meals={snackMeals}
+          mealType="snack"
+          onRepeated={fetchMeals}
           onDelete={handleDeleteMeal}
           onAdd={() => {
             setSelectedMealType("snack");
