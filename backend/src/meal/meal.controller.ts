@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../config/data-source";
 import { Meal } from "./entities/meal.entity";
 import { User } from "../user/entities/user.entity";
-import { Between } from "typeorm";
+import { And, LessThan, MoreThanOrEqual } from "typeorm";
+import { mealDay } from "./meal-day";
 import axios from "axios";
 
 export const createMeal = async (req: Request, res: Response) => {
@@ -57,11 +58,9 @@ export const getTodayMeals = async (req: Request, res: Response) => {
   try {
     const mealRepository = AppDataSource.getRepository(Meal);
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    const offset = req.query.utcOffsetMinutes === undefined ? new Date().getTimezoneOffset() : Number(req.query.utcOffsetMinutes);
+    if (!Number.isInteger(offset) || Math.abs(offset) > 840) return res.status(400).json({ message: "Invalid timezone" });
+    const { start, end } = mealDay(new Date(), offset);
 
     const userId = (req as any).user.id;
 
@@ -70,7 +69,7 @@ export const getTodayMeals = async (req: Request, res: Response) => {
         user: {
           id: userId,
         },
-        createdAt: Between(today, tomorrow),
+        createdAt: And(MoreThanOrEqual(start), LessThan(end)),
       },
     });
     
@@ -202,7 +201,8 @@ export const updateMeal = async ( req: Request, res: Response ) => {
     const mealRepository = AppDataSource.getRepository(Meal);
 
     const meal = await mealRepository.findOneBy({
-      id: Number(id)
+      id: Number(id),
+      user: { id: (req as any).user.id }
     });
 
     if(!meal){
@@ -212,6 +212,8 @@ export const updateMeal = async ( req: Request, res: Response ) => {
     }
 
     const quantity = Number(req.body.quantity);
+    if (!Number.isFinite(quantity) || quantity <= 0) return res.status(400).json({ message: "Enter a valid quantity" });
+    meal.quantity = quantity;
 
     meal.calories = (meal.baseCalories * quantity) / 100;
     meal.protein = (meal.baseProtein * quantity) / 100;

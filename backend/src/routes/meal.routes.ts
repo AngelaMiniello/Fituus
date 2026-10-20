@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { createMeal, getMeals, getTodayMeals, searchFoods, deleteMeal, getMealById, updateMeal } from "../meal/meal.controller";
 import { authMiddleware } from "../middlewares/auth.middleware";
+import { repeatLastMeal } from "../meal/repeat-meal.controller";
 
 const router = Router();
 
 router.post("/", authMiddleware, createMeal);
+router.post("/repeat-last", authMiddleware, repeatLastMeal);
 router.get("/", authMiddleware, getMeals);
 router.get("/today", authMiddleware, getTodayMeals);
 router.get("/search", authMiddleware, searchFoods);
