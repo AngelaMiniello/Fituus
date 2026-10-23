@@ -94,26 +94,31 @@ export const getTodayMeals = async (req: Request, res: Response) => {
 export const searchFoods = async ( req: Request, res: Response ) => {
   try {
 
-    const { query } = req.query;
+    const query = typeof req.query.query === "string" ? req.query.query.trim() : "";
+    if (!query || query.length > 100) return res.status(400).json({ message: "Enter a food name of up to 100 characters" });
+    if (!process.env.USDA_API_KEY) return res.status(503).json({ message: "Food search is temporarily unavailable" });
 
     const response = await axios.get(
       "https://api.nal.usda.gov/fdc/v1/foods/search",
       {
+        timeout: 12000,
         params: {
           query,
+          pageSize: 25,
           api_key: process.env.USDA_API_KEY
         }
       }
     );
 
+    if (!Array.isArray(response.data.foods)) throw new Error("Invalid food search response");
     res.json(response.data.foods);
 
   } catch(error) {
 
-    console.error(error);
-
-    res.status(500).json({
-      message:"Could not search for food"
+    // Do not log the Axios request config, which contains the USDA API key.
+    console.error("Food search failed", axios.isAxiosError(error) ? error.response?.status ?? error.code : "Invalid response");
+    res.status(axios.isAxiosError(error) && error.response?.status === 429 ? 429 : 502).json({
+      message: "Could not search for food. Please try again shortly."
     });
 
   }
