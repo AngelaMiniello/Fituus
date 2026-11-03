@@ -56,3 +56,6 @@
 
 # Ignorar archivo de pruebas o temporales sueltos
 **/example
+
+# IGNORE
+*.md
