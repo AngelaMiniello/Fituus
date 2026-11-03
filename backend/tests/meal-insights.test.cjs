@@ -14,6 +14,7 @@ test('meal insights validate consent, ownership, privacy, cache, quotas and upst
   let refuse = false;
   let quota = false;
   let malformed = false;
+  let upstreamStatus;
   let lastWhere;
   const food = { id: 1, name: 'Toast', quantity: 50, calories: 140, protein: 4, carbs: 25, fat: 3,
     user: { email: 'private@example.com', weight: 65 } };
@@ -28,6 +29,7 @@ test('meal insights validate consent, ownership, privacy, cache, quotas and upst
     assert.equal(body.contents[0].parts[0].text.includes('weight'), false);
     assert.equal(JSON.parse(body.contents[0].parts[0].text).foods[0].name, 'Toast');
     if (quota) throw { isAxiosError: true, response: { status: 429 } };
+    if (upstreamStatus) throw { isAxiosError: true, response: { status: upstreamStatus } };
     if (malformed) return { data: { candidates: [{ finishReason: 'STOP', content: { parts: [{ text: 'not JSON' }] } }] } };
     if (fail) throw new Error('upstream unavailable');
     return { data: { candidates: [{ finishReason: refuse ? 'SAFETY' : 'STOP', content: { parts: [{ text: JSON.stringify({ summary: 'This meal includes carbohydrates.', suggestion: 'You could add variety next time.' }) }] } }] } };
@@ -60,7 +62,7 @@ test('meal insights validate consent, ownership, privacy, cache, quotas and upst
     assert.equal((await run(undefined, 3)).code, 429);
     fail = false;
     refuse = true;
-    assert.equal((await run(undefined, 4)).code, 502);
+    assert.equal((await run(undefined, 4)).code, 422);
     refuse = false;
     const pair = await Promise.all([run(undefined, 5), run(undefined, 5)]);
     assert.deepEqual(pair.map(r => r.code).sort(), [200, 429]);
@@ -71,6 +73,11 @@ test('meal insights validate consent, ownership, privacy, cache, quotas and upst
     quota = false;
     malformed = true;
     assert.equal((await run(undefined, 7)).code, 502);
+    malformed = false;
+    for (const status of [400, 401, 403, 404]) {
+      upstreamStatus = status;
+      assert.equal((await run(undefined, status)).code, 503);
+    }
   } finally {
     AppDataSource.getRepository = originalRepo;
     axios.post = originalPost;
